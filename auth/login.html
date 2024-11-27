@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Вхід</title>
+		<link rel="stylesheet" href="../style/main.css" />
+		<script src="../scripts/RequestManager.js"></script>
+		<script src="../scripts/settings.js"></script>
+		<script src="../scripts/HeaderManager.js"></script>
+		<script src="../scripts/LoginApiManager.js"></script>
+	</head>
+	<body>
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				new HeaderManager("auth/login.html", menuItems);
+			});
+		</script>
+		<h1>Login</h1>
+		<form id="login-form">
+			<div>
+				<label for="username">Username</label>
+				<input type="text" name="username" id="username" required />
+			</div>
+			<div>
+				<label for="email">Email:</label>
+				<input type="email" name="email" id="email" required />
+			</div>
+			<div>
+				<label for="password">Password:</label>
+				<input type="password" name="password" id="password" required />
+			</div>
+			<button type="submit">Login</button>
+		</form>
+		<div id="messages"></div>
+		<div id="errors"></div>
+		<script>
+			document
+				.getElementById("login-form")
+				.addEventListener("submit", async function (event) {
+					event.preventDefault();
+					const form = event.target;
+					const formData = {
+						email: form.email.value,
+						password: form.password.value,
+					};
+					try {
+						const response = await LoginApiManager.login(formData, (data) => {
+							//------- зберігаємо токен у localStorage ---------------------
+
+							localStorage.setItem("jwt_token", data.token);
+						});
+					} catch (error) {
+						document.getElementById("messages").innerText = "Error to login" + error.message;
+					}
+				});
+		</script>
+	</body>
+</html>
