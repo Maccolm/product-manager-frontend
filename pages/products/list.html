@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../stylesheets/style.css">
+  <link rel="shortcut icon" href="../../images/icon-favicon.png" type="image/x-icon">
+  <script defer src="../../scripts/products.js"></script>
+  <title>Product list</title>
+</head>
+<body>
+  <div class="wrapper">
+    <a class="main-page__btn" href="/"><span class="main-page__btn-span"></span> To The Main Page</a>
+    <form class="form form-filter" id="filterForm">
+      <input class="filter__input" type="text" id="title" name="title" placeholder="Name">
+      <input class="filter__input" type="number" id="price" name="price" placeholder="Price">
+      <select class="filter__input" name="provider" id="provider">
+        <option value="">Distributor</option>
+      </select>
+      <button class="product__btn" type="submit">Filter</button>
+      <button id="clearFilter" class="product__btn" type="button">Clear filter</button>
+    </form>
+    <div class="wrapper__product" id="productList">
+    </div>
+  </div>
+</body>
+</html>

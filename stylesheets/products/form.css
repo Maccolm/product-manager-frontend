@@ -1,0 +1,56 @@
+.form-container {
+	padding-top: 15px;
+	max-width: 800px;
+	margin: auto;
+}
+.form {
+	width: 100%;
+}
+.form__section {
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+} 
+.form__section input, textarea, select {
+	outline: none;
+	transition: all 0.3s ease 0s;
+	padding: 10px;
+	background-color: #e9e6e6d4;
+	border: none;
+	border-bottom: 1px solid #000;
+}
+.form__section input:hover {
+	background-color: #efeeeed4;
+}
+.form__section input:focus {
+	background-color: #ffffffd4;
+}
+textarea{
+	min-height: 83px;
+	height: 83px;
+	max-height: 350px;
+	resize: vertical;
+}
+textarea:hover {
+	background-color: #efeeeed4;
+}
+textarea:focus {
+	background-color: #ffffffd4;
+}
+.prod-picture{
+	max-height: 100px;
+	max-width: 100px;
+}
+ul{
+	padding: 0;
+}
+.error__msg{
+	margin-bottom: 5px;
+	list-style-type: none;
+	color: red;
+}
+.error__msg::before{
+	content: "–";
+	padding-right: 5px;
+}

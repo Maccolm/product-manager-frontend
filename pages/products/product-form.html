@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../stylesheets/style.css">
+  <link rel="stylesheet" href="../../stylesheets/products/form.css">
+  <link rel="shortcut icon" href="images/icon-favicon.png" type="image/x-icon">
+  <title>Product Form</title>
+</head>
+<body>
+  <a class="main-page__btn" href="/"><span class="main-page__btn-span"></span> To The Main Page</a>
+  <div class="form-container">
+    <h1 id="form-title">Create Product</h1>
+    <form class="form" id="product-form" enctype="multipart/form-data">
+      <div class="form__section">
+        <label for="title">Name of the product</label>
+        <input type="text" id="title" name="title" value="">
+      </div>
+      <div class="form__section">
+        <label for="amount">Amount of the product</label>
+        <input type="number" id="amount" name="amount" value="">
+      </div>
+      <div class="form__section">
+        <label for="price">Price of the product $</label>
+        <input type="number" id="price" name="price" value="">
+      </div>
+      <div class="form__section">
+        <label for="info">Info about the product</label>
+        <textarea id="info" name="info"></textarea>
+      </div>
+      <div class="form__section">
+        <label for="including">Components of the product</label>
+        <input type="text" id="including" name="including" value="">
+      </div>
+      <div class="form__section">
+        <label for="numStems">Numbers of stems</label>
+        <input type="number" id="numStems" name="numStems" value="">
+      </div>
+      <div class="form__section">
+        <label for="provider">Provider</label>
+        <select name="provider" id="provider">
+          <!-- Options будуть додані динамічно -->
+        </select>
+      </div>
+      <div class="form__section">
+        <label for="img">Upload an image</label>
+        <input type="file" id="img" accept="image/*" name="imgSrc" onchange="previewImage(event)">
+        <img id="imgPreview" class="prod-picture" alt="uploaded picture">
+      </div>
+      <button class="product__btn filter__btn" type="submit">Create</button>
+      <a href="/products" class="product__btn">Cancel</a>
+    </form>
+    <div class="errors" id="errors-container">
+      <!-- Errors будуть додані динамічно -->
+    </div>
+  </div>
+  <script src="scripts/main.js"></script>
+</body>
+</html>
