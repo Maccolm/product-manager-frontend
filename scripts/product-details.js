@@ -18,10 +18,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		 const response = await fetch(`${API_BASE}/products/${productId}`);
 		 if (!response.ok) throw new Error("Failed to fetch product details");
  
-		 const product = await response.json();
- 
+		 const data = await response.json()
+		 if(!data) {
+			productDetailsContainer.innerHTML = "<p>No product data found.</p>";
+			return
+		 }
 		 // Рендеринг деталей продукту
-		 renderProductDetails(product);
+		 renderProductDetails(data)
 	  } catch (error) {
 		 console.error("Error loading product details:", error);
 		 productDetailsContainer.innerHTML = "<p>Error loading product details.</p>";
@@ -29,12 +32,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
  
 	// Рендеринг продукту
-	function renderProductDetails(product) {
+	function renderProductDetails(data) {
+		const product = data.product
 	  const distributor = product.provider?.title || "Unknown";
  
 	  productDetailsContainer.innerHTML = `
 		 <div class="product__img">
-			<img src="../${product.imgSrc}" alt="Product Image" />
+			<img src="${RequestManager.apiUrl}/uploads/${product.imgSrc}" alt="Product Image" />
 		 </div>
 		 <span class="divider divider-sm"></span>
 		 <div class="product__info">
@@ -78,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
  
 		 if (response.ok) {
 			alert("Product deleted successfully!");
-			window.location.href = "/products";
+			window.location.href = "list.html";
 		 } else {
 			alert("Failed to delete product.");
 		 }
@@ -88,6 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
  
 	// Завантаження деталей продукту при завантаженні сторінки
-	loadProductDetails();
+	loadProductDetails()
  });
  

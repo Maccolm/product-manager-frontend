@@ -9,16 +9,16 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Завантажити дистриб'юторів
 	async function loadProviders() {
 	  try {
-		 const response = await fetch(`${API_BASE}/providers`);
-		 const providers = await response.json();
-		 providers.forEach((provider) => {
+		const response = await fetch(`${API_BASE}/products`);
+		const collection = await response.json();
+		 collection.providers.forEach((provider) => {
 			const option = document.createElement("option");
 			option.value = provider._id;
 			option.textContent = provider.title;
-			providerSelect.appendChild(option);
+			providerSelect.append(option);
 		 });
 	  } catch (error) {
-		 console.error("Error loading providers:", error);
+		 console.error("Error loading products:", error);
 	  }
 	}
  
@@ -27,26 +27,27 @@ document.addEventListener("DOMContentLoaded", () => {
 	  try {
 		 const query = new URLSearchParams(filters).toString();
 		 const response = await fetch(`${API_BASE}/products?${query}`);
-		 const products = await response.json();
- 
+		 const collection = await response.json();
+		console.log(collection);
+		
 		 // Очищення попередніх продуктів
 		 productList.innerHTML = "";
  
-		 if (products.length === 0) {
-			productList.innerHTML = "<p>No products found</p>";
+		 if (collection.length === 0) {
+			productList.innerHTML = "<p>No products found</p>"
 			return;
 		 }
- 
-		 products.forEach((product) => {
-			const productContainer = document.createElement("div");
-			productContainer.className = "product__container";
+		 //{products, providers}
+		 collection.products.forEach((product) => {
+			const productContainer = document.createElement("div")
+			productContainer.className = "product__container"
  
 			const distributor = product.provider?.title || "Unknown";
  
 			productContainer.innerHTML = `
 			  <div class="product__info">
-				 <a class="product__link" href="/products/${product.id}">
-					<img src="/uploads/${product.imgSrc}" alt="Flowers Img">
+				 <a class="product__link" href="./product-details.html?id=${product._id}">
+					<img src="${RequestManager.apiUrl}/uploads/${product.imgSrc}" alt="Flowers Img">
 				 </a>
 				 <p class="product__price">${product.price} $</p>
 				 <a class="product__link" href="/products/${product.id}">${product.title}</a>
@@ -60,28 +61,28 @@ document.addEventListener("DOMContentLoaded", () => {
 					  </div>`
 					: ""
 			  }
-			`;
-			productList.append(productContainer);
-		 });
+			`
+			productList.append(productContainer)
+		 })
 	  } catch (error) {
-		 console.error("Error loading products:", error);
+		 console.error("Error loading products:", error)
 	  }
 	}
  
 	// Перевірка автентифікації
 	function isLoggedIn() {
-	  return !!localStorage.getItem("jwt_token");
+	  return !!localStorage.getItem("jwt_token")
 	}
  
 	// Видалення продукту
 	async function deleteProduct(productId) {
 	  try {
-		 const token = localStorage.getItem("jwt_token");
+		 const token = localStorage.getItem("jwt_token")
 		 await fetch(`${API_BASE}/products/${productId}`, {
 			method: "DELETE",
 			headers: { Authorization: `Bearer ${token}` },
 		 });
-		 loadProducts(); // Оновлення списку продуктів
+		 loadProducts() // Оновлення списку продуктів
 	  } catch (error) {
 		 console.error("Error deleting product:", error)
 	  }
@@ -90,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Фільтрація продуктів
 	filterForm.addEventListener("submit", (e) => {
 	  e.preventDefault()
-	  const filters = Object.fromEntries(new FormData(filterForm));
+	  const filters = Object.fromEntries(new FormData(filterForm))
 	  loadProducts(filters)
 	});
  

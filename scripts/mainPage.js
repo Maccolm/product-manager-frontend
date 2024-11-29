@@ -11,8 +11,8 @@ class HeaderManager {
  
 	  const user = RequestManager.isAuthenticated(); // Отримуємо користувача з localStorage або API
 	  const buttons = [
-		 { text: "About us", href: "/about" },
-		 { text: "Products", href: "/products" },
+		 { text: "About us", href: "about.html" },
+		 { text: "Products", href: "pages/products/list.html" },
 		 ...(user ? [{ text: "Add product", href: "/products/create" }] : []),
 		 { text: "Users", href: "/users" },
 		 user
