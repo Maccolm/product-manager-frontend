@@ -39,6 +39,11 @@ class RequestManager {
 					"jwt_token"
 				)}`;
 			}
+			console.log("Request:", {
+				url: RequestManager.getServerRoute(url),
+				headers,
+				body: JSON.stringify(data),
+		  });
 			// Виконання запиту
 			const response = await fetch(RequestManager.getServerRoute(url), {
 				method: "POST",
@@ -53,8 +58,7 @@ class RequestManager {
 				}
 				window.location.href = redirectRoute;
 			} else {
-				const result = await response.json();
-				this.showErrors(result.errors);
+				this.showErrors(resData.errors || [{message: 'Unknown error occurred'}]);
 			}
 		} catch (error) {
 			console.error("Error:", error);

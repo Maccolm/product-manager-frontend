@@ -50,14 +50,14 @@ document.addEventListener("DOMContentLoaded", () => {
 					<img src="${RequestManager.apiUrl}/uploads/${product.imgSrc}" alt="Flowers Img">
 				 </a>
 				 <p class="product__price">${product.price} $</p>
-				 <a class="product__link" href="/products/${product.id}">${product.title}</a>
+				 <a class="product__link" href="/products/${product._id}">${product.title}</a>
 				 <p class="product__text"><span>Distributor:</span> ${distributor}</p>
 			  </div>
 			  ${
 				 isLoggedIn()
 					? `<div class="product__actions actions">
-						 <a href="/products/edit/${product.id}" class="product__btn">Edit</a>
-						 <button onclick="deleteProduct('${product.id}')" class="product__btn">Delete</button>
+						 <a href="product-form.html?id=${product._id}" class="product__btn">Edit</a>
+						 <button onclick="deleteProduct('${product._id}')" class="product__btn">Delete</button>
 					  </div>`
 					: ""
 			  }
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
  
 	// Видалення продукту
-	async function deleteProduct(productId) {
+	window.deleteProduct = async function (productId) {
 	  try {
 		 const token = localStorage.getItem("jwt_token")
 		 await fetch(`${API_BASE}/products/${productId}`, {

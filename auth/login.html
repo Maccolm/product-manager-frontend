@@ -3,35 +3,33 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Вхід</title>
-		<link rel="stylesheet" href="../style/main.css" />
+		<title>Login</title>
+		<link rel="shortcut icon" href="../images/icon-favicon.png" type="image/x-icon">
+		<link rel="stylesheet" href="../stylesheets/style.css" />
+		<link rel="stylesheet" href="../stylesheets/products/form.css" />
 		<script src="../scripts/RequestManager.js"></script>
 		<script src="../scripts/settings.js"></script>
-		<script src="../scripts/HeaderManager.js"></script>
 		<script src="../scripts/LoginApiManager.js"></script>
 	</head>
 	<body>
-		<script>
-			document.addEventListener("DOMContentLoaded", () => {
-				new HeaderManager("auth/login.html", menuItems);
-			});
-		</script>
 		<h1>Login</h1>
-		<form id="login-form">
-			<div>
-				<label for="username">Username</label>
-				<input type="text" name="username" id="username" required />
-			</div>
-			<div>
-				<label for="email">Email:</label>
-				<input type="email" name="email" id="email" required />
-			</div>
-			<div>
-				<label for="password">Password:</label>
-				<input type="password" name="password" id="password" required />
-			</div>
-			<button type="submit">Login</button>
-		</form>
+		<div class="container">
+			<form id="login-form">
+				<div class="form__section">
+					<label for="username">Username</label>
+					<input type="text" name="username" id="username" required />
+				</div>
+				<div class="form__section">
+					<label for="email">Email:</label>
+					<input type="email" name="email" id="email" required />
+				</div>
+				<div class="form__section">
+					<label for="password">Password:</label>
+					<input type="password" name="password" id="password" required />
+				</div>
+				<button class="product__btn" type="submit">Login</button>
+			</form>
+		</div>
 		<div id="messages"></div>
 		<div id="errors"></div>
 		<script>

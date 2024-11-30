@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../stylesheets/style.css">
   <link rel="stylesheet" href="../../stylesheets/products/form.css">
-  <link rel="shortcut icon" href="images/icon-favicon.png" type="image/x-icon">
+  <link rel="shortcut icon" href="../../images/icon-favicon.png" type="image/x-icon">
+  <script src="../../scripts/RequestManager.js"></script>
   <title>Product Form</title>
 </head>
 <body>
-  <a class="main-page__btn" href="/"><span class="main-page__btn-span"></span> To The Main Page</a>
+  <a class="main-page__btn" href="../../index.html"><span class="main-page__btn-span"></span> To The Main Page</a>
   <div class="form-container">
     <h1 id="form-title">Create Product</h1>
     <form class="form" id="product-form" enctype="multipart/form-data">
@@ -46,15 +47,18 @@
       <div class="form__section">
         <label for="img">Upload an image</label>
         <input type="file" id="img" accept="image/*" name="imgSrc" onchange="previewImage(event)">
-        <img id="imgPreview" class="prod-picture" alt="uploaded picture">
+        <img id="imgPreview" class="prod-picture" alt="uploaded picture" src="../../images/upload-.jpg">
       </div>
-      <button class="product__btn filter__btn" type="submit">Create</button>
-      <a href="/products" class="product__btn">Cancel</a>
+      <div id="actions">
+			<button id="submit-btn" class="product__btn filter__btn" type="submit">Create</button>
+			<a href="list.html" class="product__btn">Cancel</a>
+		</div>
     </form>
     <div class="errors" id="errors-container">
       <!-- Errors будуть додані динамічно -->
     </div>
   </div>
-  <script src="scripts/main.js"></script>
+  
+  <script src="../../scripts/formProduct.js"></script>
 </body>
 </html>

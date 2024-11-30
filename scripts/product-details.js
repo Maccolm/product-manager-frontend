@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
  
 		 // Виклик API для отримання деталей продукту
 		 const response = await fetch(`${API_BASE}/products/${productId}`);
-		 if (!response.ok) throw new Error("Failed to fetch product details");
+		 if (!response.ok) throw new Error("Failed to fetch product details")
  
 		 const data = await response.json()
 		 if(!data) {
