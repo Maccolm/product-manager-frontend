@@ -83,15 +83,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	};
 	async function editForm(formData, productId) {
 		console.log("edit======>", formData);
-
 		try {
 			const response = await fetch(`${API_BASE}/products/edit/${productId}`, {
 				method: "POST",
 				body: formData,
-			});
-			console.log(response);
+			})
+			const responseData = await response.json()
 			if (response.ok) {
-				window.location.href = "./list.html";
+				console.log(responseData, 'product edited')
 			} else {
 				console.error("Failed to edit product:", response.statusText)
 			}
@@ -102,17 +101,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// Обробка форми
 	productForm.addEventListener("submit", async (e) => {
-		e.preventDefault();
+		e.preventDefault()
 
 		// Отримання даних форми
 		const formData = new FormData(productForm);
 		const formObject = Object.fromEntries(formData.entries());
+		const file = formData.get('imgSrc')
+		if (file && file.size === 0) {
+			console.error("File is empty, skipping submission.")
+			alert("Please provide a valid image file.")
+			return;
+	  }
 
 		console.log("Form Submitted:", formObject);
 		const params = new URLSearchParams(window.location.search);
 		const productId = params.get("id");
 		if (productId) {
-			editForm(formData, productId);
+			try {
+				const response = await fetch(`${API_BASE}/products/edit/${productId}`, {
+					method: "POST",
+					body: formData,
+				})
+				const responseData = await response.json()
+				if (response.ok) {
+					window.location.href = "./list.html"
+					console.log(responseData, 'product edited')
+				} else {
+					console.error("Failed to edit product:", response.statusText)
+				}
+			} catch (error) {
+				console.log(error);
+			}
 		} else {
 			// Валідація або відправка на сервер
 			// Наприклад, відправка через fetch:
@@ -121,7 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
 					method: "POST",
 					body: formData,
 				})
-				console.log(response) 
 				if (response.ok) {
 					window.location.href = "./list.html"
 				} else {

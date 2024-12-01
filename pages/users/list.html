@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management</title>
+  <link rel="stylesheet" href="../../stylesheets/style.css">
+  <link rel="shortcut icon" href="../../images/icon-favicon.png" type="image/x-icon">
+  <script defer src="../../scripts/RequestManager.js"></script>
+  <script defer src="../../scripts/userList.js"></script>
+</head>
+<body>
+  <form id="filterForm">
+    <input type="text" name="name" placeholder="Name">
+    <input type="number" name="age" placeholder="Age">
+    <button class="product__btn" type="submit">Filter</button>
+    <button class="product__btn" type="button" id="clearFilters">Clear Filters</button>
+    <a class="product__btn btn" href="../../index.html">To the main page</a>
+  </form>
+  <hr>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Email</th>
+        <th id="actionsHeader" style="display: none;">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="userTableBody">
+      <tr>
+        <td colspan="4">Loading...</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+  <div class="actions" id="addUserDiv" style="display: none;">
+    <a class="product__btn" href="/users/register">Add User</a>
+  </div>
+
+</body>
+</html>

@@ -32,7 +32,7 @@ class HeaderManager {
 		 { text: "About us", href: "about.html" },
 		 { text: "Products", href: "pages/products/list.html" },
 		 ...(user ? [{ text: "Add product", href: "pages/products/product-form.html" }] : []),
-		 { text: "Users", href: "/users" },
+		 { text: "Users", href: "pages/users/list.html" },
 		 user
 			? { text: `Logout (${user.username})`, href: "/auth/logout" }
 			: { text: "Login", href: "auth/login.html" },
