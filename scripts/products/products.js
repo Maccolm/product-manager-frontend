@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					<img src="${RequestManager.apiUrl}/uploads/${product.imgSrc}" alt="Flowers Img">
 				 </a>
 				 <p class="product__price">${product.price} $</p>
-				 <a class="product__link" href="/products/${product._id}">${product.title}</a>
+				 <a class="product__link" href="./product-details.html?id=${product._id}">${product.title}</a>
 				 <p class="product__text"><span>Distributor:</span> ${distributor}</p>
 			  </div>
 			  ${

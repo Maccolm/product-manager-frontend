@@ -7,9 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	const submitBtn = document.getElementById("submit-btn");
 	const API_BASE = RequestManager.apiBase;
 
-	// Динамічні дані (можна замінити на дані, отримані через API)
-	const errors = [];
-
 	// Ініціалізація форми
 	async function initForm() {
 		try {
@@ -34,10 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 			}
 
-			// Відображення попередніх помилок
-			displayErrors(errors);
 		} catch (err) {
-			console.log(err);
+			console.log(err)
+			displayErrors([{ msg: `An error occurred. Please try again later. ${err}` }])
 		}
 	}
 	async function loadProviders() {
@@ -81,24 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			reader.readAsDataURL(file);
 		}
 	};
-	async function editForm(formData, productId) {
-		console.log("edit======>", formData);
-		try {
-			const response = await fetch(`${API_BASE}/products/edit/${productId}`, {
-				method: "POST",
-				body: formData,
-			})
-			const responseData = await response.json()
-			if (response.ok) {
-				console.log(responseData, 'product edited')
-			} else {
-				console.error("Failed to edit product:", response.statusText)
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	}
-
 	// Обробка форми
 	productForm.addEventListener("submit", async (e) => {
 		e.preventDefault()
@@ -106,37 +84,16 @@ document.addEventListener("DOMContentLoaded", () => {
 		// Отримання даних форми
 		const formData = new FormData(productForm);
 		const formObject = Object.fromEntries(formData.entries());
-		const file = formData.get('imgSrc')
-		if (file && file.size === 0) {
-			console.error("File is empty, skipping submission.")
-			alert("Please provide a valid image file.")
-			return;
-	  }
+		// const file = formData.get('imgSrc')
 
 		console.log("Form Submitted:", formObject);
 		const params = new URLSearchParams(window.location.search);
 		const productId = params.get("id");
-		if (productId) {
-			try {
-				const response = await fetch(`${API_BASE}/products/edit/${productId}`, {
-					method: "POST",
-					body: formData,
-				})
-				const responseData = await response.json()
-				if (response.ok) {
-					window.location.href = "./list.html"
-					console.log(responseData, 'product edited')
-				} else {
-					console.error("Failed to edit product:", response.statusText)
-				}
-			} catch (error) {
-				console.log(error);
-			}
-		} else {
+
 			// Валідація або відправка на сервер
 			// Наприклад, відправка через fetch:
 			try {
-				const response = await fetch(`${API_BASE}/products/create`, {
+				const response = await fetch(`${API_BASE}/products/${productId ? `edit/${productId}` : 'create'}`, {
 					method: "POST",
 					body: formData,
 				})
@@ -144,13 +101,15 @@ document.addEventListener("DOMContentLoaded", () => {
 					window.location.href = "./list.html"
 				} else {
 					console.error("Failed to edit product:", response.statusText)
+					displayErrors([{ msg: `An error occurred. Please try again later. ${response.statusText}` }])
 				}
 			} catch (error) {
-				console.log(error);
+				console.log(error)
+				displayErrors([{ msg: `An error occurred. Please try again later. ${error}` }])
+				
 			}
-		}
-	})
+		})
 
-	initForm();
-	loadProviders();
+	initForm()
+	loadProviders()
 });

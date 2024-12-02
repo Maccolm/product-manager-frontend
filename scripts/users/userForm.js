@@ -59,10 +59,11 @@ document.addEventListener("DOMContentLoaded", () => {
 				body: JSON.stringify(data),
 			});
 
+			const responseJSON = await response.json()
 			if (!response.ok) {
-				const errorData = await response.json();
-				displayErrors(errorData.errors);
+				displayErrors(responseJSON)
 			} else {
+				alert(responseJSON.message)
 				window.location.href = "./list.html"; // redirect on success
 			}
 		} catch (error) {
