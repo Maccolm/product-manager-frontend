@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	async function loadProviders() {
 		try {
 			const response = await fetch(`${API_BASE}/products`);
-			const collection = await response.json();
+			const collection = await response.json()
 			collection.providers.forEach((provider) => {
 				const option = document.createElement("option");
 				option.value = provider._id;
