@@ -31,7 +31,7 @@ async function loadUsers(filters = {}) {
         <td>${user.email}</td>
         ${isUserLoggedIn() ? `
           <td>
-            <a class="product__btn" href="/users/register/${user._id}">Edit</a>
+            <a class="product__btn" href="./formUser.html?id=${user._id}">Edit</a>
             <button class="product__btn" onclick="deleteUser('${user._id}')">Delete</button>
           </td>
         ` : ''}

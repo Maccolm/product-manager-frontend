@@ -4,8 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	const typeSelect = document.getElementById("type");
 	const API_BASE = RequestManager.apiBase;
 
-	// Fake data for demonstration purposes (replace with real data in production)
-
 	async function loadTypes() {
 		try {
 			const response = await fetch(`${API_BASE}/users/types`);
@@ -22,21 +20,43 @@ document.addEventListener("DOMContentLoaded", () => {
 			console.log(err);
 		}
 	}
-
-	// // Populate the form with the existing data
-	// document.getElementById("username").value = data.username || "";
-	// document.getElementById("email").value = data.email || "";
-	// document.getElementById("password").value = data.password || "";
+	async function initForm() {
+		try{
+			const params = new URLSearchParams(window.location.search)
+			const productId = params.get("id")
+			if(productId) {
+				const response = await fetch(`${API_BASE}/users/register/${productId}`)
+				if(!response.ok) throw new Error("Failed to fetch product details")
+					const user = await response.json()
+					const data = user.data
+					// Populate the form with the existing data
+				if (data) {
+					document.querySelector(".title-user").textContent = 'Edit User'
+					document.getElementById("submitUserBtn").textContent = 'Edit'
+					document.getElementById("username").value = data.username || ""
+					document.getElementById("email").value = data.email || ""
+					document.getElementById("password").value = data.password || ""
+				}	
+			}
+		}catch(err){
+			console.log(err) 	
+		}
+	}
 
 	// Handle form submission
 	form.addEventListener("submit", async (e) => {
 		e.preventDefault();
-		const formData = new FormData(form);
-
+		const formData = new FormData(form)
+		const data = Object.fromEntries(formData.entries())
+		const params = new URLSearchParams(window.location.search)
+		const productId = params.get("id")
 		try {
-			const response = await fetch("/users/register", {
+			const response = await fetch(`${API_BASE}/users/register/${productId ? productId : ''}`, {
 				method: "POST",
-				body: formData,
+				headers: {
+					"Content-Type": "application/json",
+			  },
+				body: JSON.stringify(data),
 			});
 
 			if (!response.ok) {
@@ -64,5 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			errorContainer.appendChild(ul);
 		}
 	}
-	loadTypes();
-});
+	loadTypes()
+	initForm()
+})

@@ -13,14 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Ініціалізація форми
 	async function initForm() {
 		try {
-			const params = new URLSearchParams(window.location.search);
-			const productId = params.get("id");
+			const params = new URLSearchParams(window.location.search)
+			const productId = params.get("id")
 
 			if (productId) {
 				const response = await fetch(`${API_BASE}/products/${productId}`);
-				if (!response.ok) throw new Error("Failed to fetch product details");
+				if (!response.ok) throw new Error("Failed to fetch product details")
 				const data = await response.json();
-				const product = data.product;
+				const product = data.product
 				// Заповнення полів, якщо це редагування
 				if (product) {
 					formTitle.textContent = "Edit Product";
