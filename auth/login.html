@@ -15,10 +15,10 @@
 		<h1>Login</h1>
 		<div class="container">
 			<form id="login-form">
-				<div class="form__section">
+				<!-- <div class="form__section">
 					<label for="username">Username</label>
 					<input type="text" name="username" id="username" required />
-				</div>
+				</div> -->
 				<div class="form__section">
 					<label for="email">Email:</label>
 					<input type="email" name="email" id="email" required />
@@ -39,17 +39,16 @@
 					event.preventDefault();
 					const form = event.target;
 					const formData = {
-						email: form.email.value,
-						password: form.password.value,
-					};
+						email: form.email.value.trim(),
+						password: form.password.value.trim()
+					}
 					try {
 						const response = await LoginApiManager.login(formData, (data) => {
 							//------- зберігаємо токен у localStorage ---------------------
-
-							localStorage.setItem("jwt_token", data.token);
+							localStorage.setItem("jwt_token", data.token)
 						});
 					} catch (error) {
-						document.getElementById("messages").innerText = "Error to login" + error.message;
+						document.getElementById("messages").innerText = "Error to login" + error
 					}
 				});
 		</script>

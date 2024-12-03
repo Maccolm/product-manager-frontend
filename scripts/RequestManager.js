@@ -37,7 +37,7 @@ class RequestManager {
 				// Додаємо токен до заголовків запиту
 				headers["Authorization"] = `Bearer ${localStorage.getItem(
 					"jwt_token"
-				)}`;
+				)}`
 			}
 			console.log("Request:", {
 				url: RequestManager.getServerRoute(url),
@@ -50,7 +50,7 @@ class RequestManager {
 				headers: headers,
 				body: JSON.stringify(data),
 			});
-			const resData = await response.json();
+			const resData = await response.json()
 			// Обробка успішного запиту
 			if (response.ok) {
 				if (callback) {
@@ -58,35 +58,35 @@ class RequestManager {
 				}
 				window.location.href = redirectRoute;
 			} else {
-				this.showErrors(resData.errors || [{message: 'Unknown error occurred'}]);
+				this.showErrors(resData.error || {message: 'Unknown error occurred'})
+				console.log("Response body:", resData)
 			}
 		} catch (error) {
-			console.error("Error:", error);
-			this.showErrors([{ message: "Network error. Please try again later." }]);
+			console.error("Error:", error)
+			this.showErrors([{ message: "Network error. Please try again later." }])
 		}
 	}
 	// Метод для відображення помилок
-	static showErrors(errors, errorsContainerSelector = "#errors") {
+	static showErrors(error, errorsContainerSelector = "#errors") {
 		let errorsContainer = document.querySelector(errorsContainerSelector);
 		if (!errorsContainer) {
 			// Якщо контейнер для помилок не існує, створюємо його
 			errorsContainer = document.createElement("div");
 			errorsContainer.id = errorsContainerSelector.replace("#", "");
-			document.body.append(errorsContainer);
+			document.body.append(errorsContainer)
 		}
-		errorsContainer.innerHTML = "";
-		errors.forEach((error) => {
-			const errorMessage = document.createElement("div");
-			errorMessage.classList.add("error-message");
-			errorMessage.textContent = error.message;
-			errorsContainer.append(errorMessage);
-		});
+		errorsContainer.innerHTML = ""
+
+		const errorMessage = document.createElement("div");
+		errorMessage.classList.add("error-message");
+		errorMessage.textContent = error
+		errorsContainer.append(errorMessage)
 	}
 	// Метод для виконання POST запиту з даними форми
 	static async postFormRequest(url, form, addAuthorization = true) {
 		const headers = {};
 		if (addAuthorization && RequestManager.isAuthenticated()) {
-			headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`;
+			headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`
 		}
 		const formData = new FormData(form);
 		const response = await fetch(url, {
@@ -109,7 +109,7 @@ class RequestManager {
 			headers: headers,
 			body: JSON.stringify(body),
 		});
-		const data = await response.json();
+		const data = await response.json()
 		return data;
 	}
 	// Метод для виконання DELETE запиту

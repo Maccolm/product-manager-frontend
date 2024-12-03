@@ -1,4 +1,11 @@
+#errors{
+	margin: 20px auto;
+}
+.error-message{
 
+	text-align: center;
+	color: red;
+}
 a{
 	text-decoration: none;
 	color: #030403;
