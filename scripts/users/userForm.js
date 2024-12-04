@@ -4,6 +4,11 @@ document.addEventListener("DOMContentLoaded", () => {
 	const typeSelect = document.getElementById("type");
 	const API_BASE = RequestManager.apiBase;
 
+	window.onload = async function validateUser() {
+		if(!RequestManager.isAuthenticated()) {
+			window.location.href = './list.html'
+		}
+	}
 	async function loadTypes() {
 		try {
 			const response = await fetch(`${API_BASE}/users/types`);

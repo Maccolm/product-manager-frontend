@@ -26,8 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	async function loadProducts(filters = {}) {
 	  try {
 		 const query = new URLSearchParams(filters).toString();
-		 const response = await fetch(`${API_BASE}/products?${query}`);
-		 const collection = await response.json();
+		 const response = RequestManager.fetchData(`${API_BASE}/products?${query}`)
+		 const collection = await response.json()
 		console.log(collection);
 		
 		 // Очищення попередніх продуктів

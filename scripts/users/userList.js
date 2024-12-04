@@ -12,43 +12,45 @@ async function loadUsers(filters = {}) {
     userTableBody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
 
     const queryParams = new URLSearchParams(filters).toString();
-    const response = await fetch(`${API_BASE}/users/?${queryParams}`);
-    const data = await response.json()
+    const data = await RequestManager.fetchData(`/users/?${queryParams}`)
 	 console.log(data)
-	 
 
-    if (data.users.length === 0) {
-      userTableBody.innerHTML = '<tr><td colspan="4">No users found.</td></tr>';
-      return;
-    }
-
-    userTableBody.innerHTML = '';
-    data.users.forEach(user => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${user.username}</td>
-        <td>${user.type?.title || 'Unknown'}</td>
-        <td>${user.email}</td>
-        ${isUserLoggedIn() ? `
-          <td>
-            <a class="product__btn" href="./formUser.html?id=${user._id}">Edit</a>
-            <button class="product__btn" onclick="deleteUser('${user._id}')">Delete</button>
-          </td>
-        ` : ''}
-      `;
-      userTableBody.append(row);
-    });
-
-    if (isUserLoggedIn()) {
-      actionsHeader.style.display = 'table-cell';
-      addUserDiv.style.display = 'block';
-    } else {
-      actionsHeader.style.display = 'none';
-      addUserDiv.style.display = 'none';
-    }
+    if (data.users && data.users.length === 0) {
+      userTableBody.innerHTML = '<tr><td colspan="4">No users found.</td></tr>'
+      return
+    } else if (data.users) {
+		 userTableBody.innerHTML = '';
+		 data.users.forEach(user => {
+			const row = document.createElement('tr');
+			row.innerHTML = `
+			  <td>${user.username}</td>
+			  <td>${user.type?.title || 'Unknown'}</td>
+			  <td>${user.email}</td>
+			  ${isUserLoggedIn() ? `
+				 <td>
+					<a class="product__btn" href="./formUser.html?id=${user._id}">Edit</a>
+					<button class="product__btn" onclick="deleteUser('${user._id}')">Delete</button>
+				 </td>
+			  ` : ''}
+			`;
+			userTableBody.append(row);
+		 })
+	
+		 if (isUserLoggedIn()) {
+			actionsHeader.style.display = 'table-cell';
+			addUserDiv.style.display = 'block';
+		 } else {
+			actionsHeader.style.display = 'none';
+			addUserDiv.style.display = 'none';
+		 }
+	 }
+	 if(data.result === 'Access Denied') {
+		 userTableBody.innerHTML = `<tr><td colspan="4">${data.result}.</td></tr>`
+	 }
+		
   } catch (error) {
     console.error('Error loading users:', error);
-    userTableBody.innerHTML = '<tr><td colspan="4">Error loading users.</td></tr>';
+    userTableBody.innerHTML = `<tr><td colspan="4">${error}.</td></tr>`
   }
 }
 

@@ -142,25 +142,24 @@ class RequestManager {
 	}
 	// Метод для виконання GET запиту
 	static async fetchData(url, addAuthorization = true) {
-		let response;
+		
+		let response
 		try {
 			const headers = { "Content-Type": "application/json" };
 			if (addAuthorization && RequestManager.isAuthenticated()) {
-				headers["Authorization"] = `Bearer ${localStorage.getItem(
-					"jwt_token"
-				)}`;
+				headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`
 			}
 			response = await fetch(this.getServerRoute(url), {
 				method: "GET",
 				headers: headers,
 			});
 			if (response.ok) {
-				const data = await response.json();
+				const data = await response.json()
 				return data;
 			} else {
 				const result = await response.json();
-				this.showErrors(result.errors);
-				return null;
+				this.showErrors(result.errors)
+				return result
 			}
 		} catch (error) {
 			console.error("Error:", error);
