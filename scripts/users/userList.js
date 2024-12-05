@@ -4,7 +4,8 @@ const actionsHeader = document.getElementById('actionsHeader');
 const addUserDiv = document.getElementById('addUserDiv');
 
 // Simulate user authentication status
-const isUserLoggedIn = () => !!localStorage.getItem('jwt_token');
+const isUserLoggedIn = () => !!localStorage.getItem('jwt_token')
+const isAdmin = async () => 
 
 // Fetch and render users
 async function loadUsers(filters = {}) {
@@ -57,12 +58,9 @@ async function loadUsers(filters = {}) {
 // Delete user
 async function deleteUser(userId) {
   try {
-    const token = localStorage.getItem('jwt_token');
-    await fetch(`${API_BASE}/${userId}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    loadUsers(); // Reload user list after deletion
+	const response = await RequestManager.deleteRequest(`${RequestManager.apiBase}/users`, userId)
+	console.log(response)
+	
   } catch (error) {
     console.error('Error deleting user:', error);
   }

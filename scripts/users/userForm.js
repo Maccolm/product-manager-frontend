@@ -2,7 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	const form = document.getElementById("register-form");
 	const errorContainer = document.getElementById("error-container");
 	const typeSelect = document.getElementById("type");
-	const API_BASE = RequestManager.apiBase;
+	const API_BASE = RequestManager.apiBase
+	const inputs = document.querySelectorAll('input')
+	console.log(inputs);
+	
 
 	window.onload = async function validateUser() {
 		if(!RequestManager.isAuthenticated()) {
@@ -11,9 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 	async function loadTypes() {
 		try {
-			const response = await fetch(`${API_BASE}/users/types`);
-			const collection = await response.json()
-			const types = collection.types
+			const response = await RequestManager.fetchData(`/users/types`);
+			const types = response.types
 			
 			types.forEach((type) => {
 				const option = document.createElement("option");
@@ -28,12 +30,16 @@ document.addEventListener("DOMContentLoaded", () => {
 	async function initForm() {
 		try{
 			const params = new URLSearchParams(window.location.search)
-			const productId = params.get("id")
-			if(productId) {
-				const response = await fetch(`${API_BASE}/users/register/${productId}`)
-				if(!response.ok) throw new Error("Failed to fetch product details")
-					const user = await response.json()
-					const data = user.data
+			const userId = params.get("id")
+			if(userId) {
+				const response = await RequestManager.fetchData(`/users/register/${userId}`)
+				
+				if(!response) {
+					throw new Error("Failed to fetch user details")
+				} else if (response.error) {
+					closeAccess(response.error)
+				}
+					const data = response.data
 					// Populate the form with the existing data
 				if (data) {
 					document.querySelector(".title-user").textContent = 'Edit User'
@@ -44,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				}	
 			}
 		}catch(err){
-			console.log(err) 	
+			console.log(err)
 		}
 	}
 
@@ -54,21 +60,14 @@ document.addEventListener("DOMContentLoaded", () => {
 		const formData = new FormData(form)
 		const data = Object.fromEntries(formData.entries())
 		const params = new URLSearchParams(window.location.search)
-		const productId = params.get("id")
+		const userId = params.get("id")
 		try {
-			const response = await fetch(`${API_BASE}/users/register/${productId ? productId : ''}`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-			  },
-				body: JSON.stringify(data),
-			});
-
-			const responseJSON = await response.json()
-			if (!response.ok) {
-				displayErrors(responseJSON)
-			} else {
-				alert(responseJSON.message)
+			const response = await RequestManager.postRequest(`${API_BASE}/users/register/${userId ? userId : ''}`, data)
+			console.log(response)
+			
+			if (response) {
+				const responseMessage = response.error ? response.error : response.message
+				alert(responseMessage)
 				window.location.href = "./list.html"; // redirect on success
 			}
 		} catch (error) {
@@ -76,10 +75,17 @@ document.addEventListener("DOMContentLoaded", () => {
 			displayErrors([{ msg: "An error occurred. Please try again later." }]);
 		}
 	});
+	function closeAccess(message) {
+		inputs.forEach(input => {
+			input.disabled = true
+		})
+		typeSelect.disabled = true
+		errorContainer.innerHTML = message
 
+	}
 	// Function to display errors
 	function displayErrors(errors) {
-		errorContainer.innerHTML = "";
+		errorContainer.innerHTML = ""
 		if (errors.length > 0) {
 			const ul = document.createElement("ul");
 			errors.forEach((error) => {

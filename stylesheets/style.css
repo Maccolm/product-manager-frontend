@@ -2,9 +2,15 @@
 	margin: 20px auto;
 }
 .error-message{
-
 	text-align: center;
 	color: red;
+}
+input:disabled:hover {
+	pointer-events: none;
+}
+input:disabled, select:disabled {
+	color: #9d9d9d;
+	background-color: #cfcfcf !important;
 }
 a{
 	text-decoration: none;

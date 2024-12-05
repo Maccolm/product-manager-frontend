@@ -104,6 +104,9 @@ class RequestManager {
 		if (addAuthorization && RequestManager.isAuthenticated()) {
 			headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`;
 		}
+		console.log('route', route);
+		console.log('body', body);
+		
 		const response = await fetch(route, {
 			method: "POST",
 			headers: headers,
@@ -118,10 +121,9 @@ class RequestManager {
 		if (addAuthorization && RequestManager.isAuthenticated()) {
 			headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`;
 		}
-		const response = await fetch(route, {
+		const response = await fetch(`${route}/${id}`, {
 			method: "DELETE",
 			headers: headers,
-			body: JSON.stringify({ id }),
 		});
 		const data = await response.json();
 		window.location.reload(true);
@@ -164,7 +166,7 @@ class RequestManager {
 		} catch (error) {
 			console.error("Error:", error);
 			this.showErrors([{ message: "Network error. Please try again later." }]);
-			return null;
+			return null
 		}
 	}
 	// Метод для отримання налаштувань

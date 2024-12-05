@@ -26,19 +26,17 @@ document.addEventListener("DOMContentLoaded", () => {
 	async function loadProducts(filters = {}) {
 	  try {
 		 const query = new URLSearchParams(filters).toString();
-		 const response = RequestManager.fetchData(`${API_BASE}/products?${query}`)
-		 const collection = await response.json()
-		console.log(collection);
+		 const response = await RequestManager.fetchData(`/products?${query}`)
 		
 		 // Очищення попередніх продуктів
 		 productList.innerHTML = "";
  
-		 if (collection.length === 0) {
+		 if (response.length === 0) {
 			productList.innerHTML = "<p>No products found</p>"
 			return;
 		 }
 		 //{products, providers}
-		 collection.products.forEach((product) => {
+		 response.products.forEach((product) => {
 			const productContainer = document.createElement("div")
 			productContainer.className = "product__container"
  
