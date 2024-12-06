@@ -6,20 +6,19 @@ document.addEventListener("DOMContentLoaded", () => {
 	const filterForm = document.getElementById("filterForm")
 	const clearFilter = document.getElementById("clearFilter")
  
-	// Завантажити дистриб'юторів
-	async function loadProviders() {
-	  try {
-		const response = await fetch(`${API_BASE}/products`);
-		const collection = await response.json();
-		 collection.providers.forEach((provider) => {
-			const option = document.createElement("option");
+	//load providers for filters
+	function loadProviders(providers) {
+		providerSelect.innerHTML = ''
+		const option = document.createElement("option")
+		option.value = ''
+		option.textContent = 'Distributor'
+		providerSelect.append(option)
+		 providers.forEach((provider) => {
+			const option = document.createElement("option")
 			option.value = provider._id;
 			option.textContent = provider.title;
 			providerSelect.append(option);
-		 });
-	  } catch (error) {
-		 console.error("Error loading products:", error);
-	  }
+		 })
 	}
  
 	// Завантажити продукти
@@ -27,7 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	  try {
 		 const query = new URLSearchParams(filters).toString();
 		 const response = await RequestManager.fetchData(`/products?${query}`)
-		
+		 console.log(response)
+		loadProviders(response.providers)
 		 // Очищення попередніх продуктів
 		 productList.innerHTML = "";
  
@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			productList.innerHTML = "<p>No products found</p>"
 			return;
 		 }
+		 
 		 //{products, providers}
 		 response.products.forEach((product) => {
 			const productContainer = document.createElement("div")
@@ -100,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
  
 	// Початкове завантаження
-	loadProviders()
 	loadProducts()
- });
+ })
  

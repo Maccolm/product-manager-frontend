@@ -7,6 +7,7 @@
   <link rel="shortcut icon" href="../../images/icon-favicon.png" type="image/x-icon">
   <script defer src="../../scripts//products/products.js"></script>
   <script defer src="../../scripts/RequestManager.js"></script>
+  <script defer src="../../scripts/users/ensureAdmin.js"></script>
   <title>Product list</title>
 </head>
 <body>
@@ -16,7 +17,6 @@
       <input class="filter__input" type="text" id="title" name="title" placeholder="Name">
       <input class="filter__input" type="number" id="price" name="price" placeholder="Price">
       <select class="filter__input" name="provider" id="provider">
-        <option value="">Distributor</option>
       </select>
       <button class="product__btn" type="submit">Filter</button>
       <button id="clearFilter" class="product__btn" type="button">Clear filter</button>

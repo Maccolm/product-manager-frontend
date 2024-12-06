@@ -1,11 +1,10 @@
 const API_BASE = RequestManager.apiBase
-const userTableBody = document.getElementById('userTableBody');
-const actionsHeader = document.getElementById('actionsHeader');
-const addUserDiv = document.getElementById('addUserDiv');
+const userTableBody = document.getElementById('userTableBody')
+const actionsHeader = document.getElementById('actionsHeader')
+const addUserDiv = document.getElementById('addUserDiv')
 
 // Simulate user authentication status
 const isUserLoggedIn = () => !!localStorage.getItem('jwt_token')
-const isAdmin = async () => 
 
 // Fetch and render users
 async function loadUsers(filters = {}) {
@@ -14,6 +13,8 @@ async function loadUsers(filters = {}) {
 
     const queryParams = new URLSearchParams(filters).toString();
     const data = await RequestManager.fetchData(`/users/?${queryParams}`)
+	 const isAdmin = await ensureAdmin(data.userr.role)
+	 
 	 console.log(data)
 
     if (data.users && data.users.length === 0) {
@@ -27,7 +28,7 @@ async function loadUsers(filters = {}) {
 			  <td>${user.username}</td>
 			  <td>${user.type?.title || 'Unknown'}</td>
 			  <td>${user.email}</td>
-			  ${isUserLoggedIn() ? `
+			  ${isUserLoggedIn() && isAdmin ? `
 				 <td>
 					<a class="product__btn" href="./formUser.html?id=${user._id}">Edit</a>
 					<button class="product__btn" onclick="deleteUser('${user._id}')">Delete</button>
@@ -37,7 +38,7 @@ async function loadUsers(filters = {}) {
 			userTableBody.append(row);
 		 })
 	
-		 if (isUserLoggedIn()) {
+		 if (isUserLoggedIn() && isAdmin) {
 			actionsHeader.style.display = 'table-cell';
 			addUserDiv.style.display = 'block';
 		 } else {

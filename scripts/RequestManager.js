@@ -125,9 +125,13 @@ class RequestManager {
 			method: "DELETE",
 			headers: headers,
 		});
-		const data = await response.json();
-		window.location.reload(true);
-		return data;
+		const data = await response.json()
+		if(data.error){
+			alert(data.error)
+		} else {
+			window.location.reload(true)
+		}
+		return data
 	}
 	// Метод для обробки вибору файлу
 	static handleFileSelect(event, imgSelector) {
