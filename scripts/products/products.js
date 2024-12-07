@@ -28,12 +28,19 @@ document.addEventListener("DOMContentLoaded", () => {
 		 const response = await RequestManager.fetchData(`/products?${query}`)
 		 console.log(response)
 		loadProviders(response.providers)
+		const isAdmin = response.isAdmin
+		//перевірка на expired token
+		if(typeof isAdmin === 'string') {
+			confirm(isAdmin)
+			? window.location.href = '../../auth/login.html' && localStorage.removeItem('jwt_token')
+			: localStorage.removeItem('jwt_token')
+		}
 		 // Очищення попередніх продуктів
-		 productList.innerHTML = "";
+		 productList.innerHTML = ""
  
 		 if (response.length === 0) {
 			productList.innerHTML = "<p>No products found</p>"
-			return;
+			return
 		 }
 		 
 		 //{products, providers}
@@ -41,8 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			const productContainer = document.createElement("div")
 			productContainer.className = "product__container"
  
-			const distributor = product.provider?.title || "Unknown";
- 
+			const distributor = product.provider?.title || "Unknown"
 			productContainer.innerHTML = `
 			  <div class="product__info">
 				 <a class="product__link" href="./product-details.html?id=${product._id}">
@@ -53,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				 <p class="product__text"><span>Distributor:</span> ${distributor}</p>
 			  </div>
 			  ${
-				 isLoggedIn()
+				 isLoggedIn() && isAdmin
 					? `<div class="product__actions actions">
 						 <a href="product-form.html?id=${product._id}" class="product__btn">Edit</a>
 						 <button onclick="deleteProduct('${product._id}')" class="product__btn">Delete</button>

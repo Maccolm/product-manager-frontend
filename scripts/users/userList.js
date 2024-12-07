@@ -13,9 +13,7 @@ async function loadUsers(filters = {}) {
 
     const queryParams = new URLSearchParams(filters).toString();
     const data = await RequestManager.fetchData(`/users/?${queryParams}`)
-	 const isAdmin = await ensureAdmin(data.userr.role)
-	 
-	 console.log(data)
+	 const isAdmin = data.userr ? await ensureAdmin(data.userr.role) : false
 
     if (data.users && data.users.length === 0) {
       userTableBody.innerHTML = '<tr><td colspan="4">No users found.</td></tr>'
