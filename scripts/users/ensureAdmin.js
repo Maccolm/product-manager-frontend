@@ -2,8 +2,9 @@ async function ensureAdmin(typeId) {
 	try {
 		const response = await RequestManager.fetchData('/users/types')
 		if (response) {
-			const types = response.types			
-			const isAdmin = types.some(type => type.id === typeId && type.title === 'admin')
+			const types = response.types
+			const isAdmin = types.some(type => type._id === typeId && type.title === 'admin')
+			
 			return isAdmin
 		}
 		return null

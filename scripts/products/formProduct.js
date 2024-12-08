@@ -53,16 +53,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// Відображення помилок
 	const displayErrors = (errors) => {
-		errorsContainer.innerHTML = "";
+		errorsContainer.innerHTML = ""
 		if (errors.length > 0) {
-			const ul = document.createElement("ul");
+			const ul = document.createElement("ul")
 			errors.forEach((error) => {
-				const li = document.createElement("li");
-				li.className = "error__msg";
-				li.textContent = error.msg;
-				ul.appendChild(li);
-			});
-			errorsContainer.appendChild(ul);
+				const li = document.createElement("li")
+				li.className = "error__msg"
+				li.textContent = error.msg
+				ul.appendChild(li)
+			})
+			errorsContainer.appendChild(ul)
 		}
 	};
 
@@ -93,15 +93,21 @@ document.addEventListener("DOMContentLoaded", () => {
 			// Валідація або відправка на сервер
 			// Наприклад, відправка через fetch:
 			try {
-				const response = await fetch(`${API_BASE}/products/${productId ? `edit/${productId}` : 'create'}`, {
-					method: "POST",
-					body: formData,
-				})
-				if (response.ok) {
-					window.location.href = "./list.html"
+				const response = await RequestManager.postFormRequest(`${API_BASE}/products/${productId ? `edit/${productId}` : 'create'}`, productForm)
+				if (!response.errors && !response.error) {
+					alert(response.message)
+					//wait after finished alert and after redirect
+					setTimeout(() => {
+						window.location.href = "./list.html"
+					},0)
 				} else {
-					console.error("Failed to edit product:", response.statusText)
-					displayErrors([{ msg: `An error occurred. Please try again later. ${response.statusText}` }])
+					if(response.error){
+						alert(response.error)
+						window.location.href = "../../index.html"
+						localStorage.removeItem('jwt_token')
+					}
+					console.error("Failed to edit product:", response.errors)
+					displayErrors(response.errors)
 				}
 			} catch (error) {
 				console.log(error)

@@ -88,7 +88,7 @@ class RequestManager {
 		if (addAuthorization && RequestManager.isAuthenticated()) {
 			headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`
 		}
-		const formData = new FormData(form);
+		const formData = new FormData(form)
 		const response = await fetch(url, {
 			method: "POST",
 			headers: headers,
@@ -124,7 +124,7 @@ class RequestManager {
 		const response = await fetch(`${route}/${id}`, {
 			method: "DELETE",
 			headers: headers,
-		});
+		})
 		const data = await response.json()
 		if(data.error){
 			alert(data.error)
