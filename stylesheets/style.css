@@ -1,3 +1,6 @@
+*:disabled{
+	pointer-events: none;
+}
 #errors{
 	margin: 20px auto;
 }

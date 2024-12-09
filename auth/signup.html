@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Login</title>
+		<title>Sign Up</title>
 		<link rel="shortcut icon" href="../images/icon-favicon.png" type="image/x-icon">
 		<link rel="stylesheet" href="../stylesheets/style.css" />
 		<link rel="stylesheet" href="../stylesheets/products/form.css" />
@@ -12,9 +12,13 @@
 		<script src="../scripts/LoginApiManager.js"></script>
 	</head>
 	<body>
-		<h1>Login</h1>
+		<h1>Sign Up</h1>
 		<div class="container">
 			<form id="login-form">
+				<div class="form__section">
+					<label for="username">Username</label>
+					<input type="text" name="username" id="username" required />
+				</div>
 				<div class="form__section">
 					<label for="email">Email:</label>
 					<input type="email" name="email" id="email" required />
@@ -23,8 +27,8 @@
 					<label for="password">Password:</label>
 					<input type="password" name="password" id="password" required />
 				</div>
-				<button id="login" class="product__btn" type="submit">Login</button>
-				<a href="./signup.html" class="product__btn">Sign up</a>
+				<a href="./login.html" class="product__btn">Login</a>
+				<button id="register" class="product__btn" type="submit">Sign Up</button>
 			</form>
 		</div>
 		<div id="messages"></div>
@@ -36,20 +40,21 @@
 					event.preventDefault();
 					const form = event.target;
 					const formData = {
+						username: form.username.value.trim(),
 						email: form.email.value.trim(),
 						password: form.password.value.trim()
 					}
-					const loginBtn = document.getElementById('login')
-					loginBtn.disabled = true
+					const registerBtn = document.getElementById('register')
+					registerBtn.disabled = true
 					try {
-						const response = await LoginApiManager.login(formData, (data) => {
+						const response = await LoginApiManager.signup(formData, (data) => {
 							//------- зберігаємо токен у localStorage ---------------------
 							localStorage.setItem("jwt_token", data.token)
-						})
-						loginBtn.disabled = false
+						});
+						registerBtn.disabled = false
 					} catch (error) {
-						loginBtn.disabled = false
-						document.getElementById("messages").innerText = "Error to login" + error
+						registerBtn.disabled = false
+						document.getElementById("messages").innerText = "Error to sign up" + error
 					}
 				});
 		</script>

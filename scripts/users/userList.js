@@ -57,9 +57,10 @@ async function loadUsers(filters = {}) {
 // Delete user
 async function deleteUser(userId) {
   try {
-	const response = await RequestManager.deleteRequest(`${RequestManager.apiBase}/users`, userId)
-	console.log(response)
-	
+	if(confirm('To delete this user?')){
+		const response = await RequestManager.deleteRequest(`${RequestManager.apiBase}/users`, userId)
+		console.log(response)
+	}
   } catch (error) {
     console.error('Error deleting user:', error);
   }
