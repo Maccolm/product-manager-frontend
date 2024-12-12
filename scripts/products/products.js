@@ -5,6 +5,21 @@ document.addEventListener("DOMContentLoaded", () => {
 	const filterForm = document.getElementById("filterForm");
 	const clearFilter = document.getElementById("clearFilter");
 
+	let pageData = {}
+
+	 //функція застосування фільтрів
+	 function getFiltersQueryString() {
+		const queryOptions = [
+		  `page=${pageData.currentPage ?? 0}`,
+		  `perPage=${pageData.perPage ?? 4}`,
+		]
+		const filtersQueryString = filtersManager.getQueryString()
+		if (filtersQueryString) queryOptions.push(filtersQueryString)
+
+		queryOptions.push(`sort=price:${priceOrderSelector.currentOrder}`)
+		return queryOptions.join('&')
+	 }
+
 	//load providers for filters
 	function loadProviders(providers) {
 		providerSelect.innerHTML = "";
@@ -21,13 +36,21 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	// Завантажити продукти
-	async function loadProducts(filters = {}) {
+	async function loadProducts(page = 0) {
 		try {
-			const query = new URLSearchParams(filters).toString();
+			if(Number.isFinite(page)) pageData.currentPage = page
+			const resData = await ProductsApiManager.getListWithQuery(getFiltersQueryString())
+			let productsList = resData.data?.documents
+
+			pageData = {
+				...pageData,
+				totalItemsNumber: resData.data?.count,
+			 }
+			 //тут буде прилітати щось інше
 			const response = await RequestManager.fetchData(`/products?${query}`);
 			console.log(response);
-			loadProviders(response.providers);
-			const isAdmin = response.isAdmin;
+			loadProviders(response.providers)
+			const isAdmin = response.isAdmin
 			//перевірка на expired token
 			if (typeof isAdmin === "string") {
 				if (confirm(isAdmin)) {
@@ -109,5 +132,16 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	// Початкове завантаження
-	loadProducts();
+	loadProducts()
+
+	// --------add Pagination --------
+	new PaginationManager({
+		totalItemsNumber: pageData.totalItemsNumber,
+		itemsPerPage: 4,
+		currentPage: 0,
+		containerSelector: '#pagination',
+		onClick: async (page) => {
+		  await loadProducts(page)
+		},
+	 })
 });
