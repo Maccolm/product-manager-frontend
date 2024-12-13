@@ -1,7 +1,9 @@
 class RequestManager {
 	// Базовий URL для API запитів
-	static apiBase = "https://product-manager-node-js.onrender.com/api/v1"
-	static apiUrl = "https://product-manager-node-js.onrender.com"
+	// static apiBase = "https://product-manager-node-js.onrender.com/api/v1"
+	// static apiUrl = "https://product-manager-node-js.onrender.com"
+	static apiBase = "mongodb://localhost:27017/api/v1"
+	static apiUrl = "mongodb://localhost:27017"
 	// Метод для отримання повного маршруту до сервера
 	static getServerRoute(path) {
 		return `${RequestManager.apiBase}${path}`;

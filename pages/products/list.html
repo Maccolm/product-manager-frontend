@@ -8,7 +8,10 @@
   <script defer src="../../scripts//products/products.js"></script>
   <script defer src="../../scripts/RequestManager.js"></script>
   <script defer src="../../scripts/users/ensureAdmin.js"></script>
+  <script defer src="../../scripts/api/BaseApiManager.js"></script>
   <script defer src="../../scripts/components/PaginationManager.js"></script>
+  <script defer src="../../scripts/components/PriceOrderSelector.js"></script>
+  <script defer src="../../scripts/components/FiltersManager.js"></script>
   <script defer src="../../scripts/api/ProductApiManager.js"></script>
   <title>Product list</title>
 </head>
@@ -23,7 +26,14 @@
       <button class="product__btn" type="submit">Filter</button>
       <button id="clearFilter" class="product__btn" type="button">Clear filter</button>
     </form>
-    <div class="wrapper__product" id="productList">
+	 <div class="base-container">
+      <div class="filters-container"></div>
+      <div class="content-container">
+        <!-- <h1>Список продуктів</h1> -->
+        <div class="price-order-container"></div>
+		  
+		  <div class="wrapper__product" id="productList">
+		 <div class="pagination-container"></div>
     </div>
   </div>
 </body>

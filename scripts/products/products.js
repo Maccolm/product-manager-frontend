@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 	const API_BASE = RequestManager.apiBase;
 	const productList = document.getElementById("productList");
 	const providerSelect = document.getElementById("provider");
@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const clearFilter = document.getElementById("clearFilter");
 
 	let pageData = {}
-
+	let priceOrderSelector, filtersManager
 	 //функція застосування фільтрів
 	 function getFiltersQueryString() {
 		const queryOptions = [
@@ -41,7 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
 			if(Number.isFinite(page)) pageData.currentPage = page
 			const resData = await ProductsApiManager.getListWithQuery(getFiltersQueryString())
 			let productsList = resData.data?.documents
-
+			console.log('resData====>', resData)
+			
 			pageData = {
 				...pageData,
 				totalItemsNumber: resData.data?.count,
@@ -128,11 +129,70 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Очищення фільтрів
 	clearFilter.addEventListener("click", () => {
 		filterForm.reset();
-		loadProducts();
+		loadProducts(0);
 	});
 
-	// Початкове завантаження
-	loadProducts()
+	 // Додавання селектора сортування
+	 priceOrderSelector = new PriceOrderSelector(
+		'.price-order-container',
+		() => loadProducts(0)
+	 )
+
+	 //----------------------
+	 // Отримання даних продуктів з сервера
+	 const resFiltersData = await ProductsApiManager.getFiltersData()
+
+	 if (resFiltersData?.data) {
+		const filtersConfig = [
+		  {
+			 name: 'title',
+			 title: 'Назва товару',
+			 type: 'search',
+		  },
+		  {
+			 name: 'price',
+			 title: 'price',
+			 type: 'range',
+			 options: { min: 0, max: 1000 },
+		  },
+		  // {
+		  //   title: 'Тип продавця',
+		  //   name: 'type',
+		  //   type: 'dropdown',
+		  //   options: resFiltersData.data.types.map((item) => ({
+		  //     title: item.title,
+		  //     value: item._id,
+		  //   })),
+		  // },
+		  {
+			 title: 'Продавець',
+			 name: 'seller',
+			 type: 'selectMany',
+			 options: resFiltersData.data.users.map((item) => ({
+				title: item.username,
+				value: item._id,
+			 })),
+		  },
+		]
+	filtersManager = new FiltersManager(
+		filtersConfig,
+		'.filters-container',
+		async () => {
+		  await loadProducts(0)
+		  //------------- додавання пагінації -----
+		  new PaginationManager({
+			 totalItemsNumber: pageData.totalItemsNumber,
+			 itemsPerPage: 4,
+			 currentPage: 0,
+			 containerSelector: '#pagination',
+			 onClick: async (page) => {
+				await loadProducts(page)
+			 },
+		  })
+		}
+	 )
+	 // Початкове завантаження
+	loadProducts(0)
 
 	// --------add Pagination --------
 	new PaginationManager({
@@ -144,4 +204,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		  await loadProducts(page)
 		},
 	 })
-});
+	}
+	})
+
