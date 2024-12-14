@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		try {
 			if(Number.isFinite(page)) pageData.currentPage = page
 			const resData = await ProductsApiManager.getListWithQuery(getFiltersQueryString())
-			let productsList = resData.data?.documents
+			let products = resData.data?.documents
 			console.log('resData====>', resData)
 			
 			pageData = {
@@ -48,10 +48,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 				totalItemsNumber: resData.data?.count,
 			 }
 			 //тут буде прилітати щось інше
-			const response = await RequestManager.fetchData(`/products?${query}`);
-			console.log(response);
-			loadProviders(response.providers)
-			const isAdmin = response.isAdmin
+			// const response = await RequestManager.fetchData(`/products`)
+			// console.log(response);
+			// loadProviders(response.providers)
+			const isAdmin = response.isAdmin || false
 			//перевірка на expired token
 			if (typeof isAdmin === "string") {
 				if (confirm(isAdmin)) {
@@ -141,12 +141,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 	 //----------------------
 	 // Отримання даних продуктів з сервера
 	 const resFiltersData = await ProductsApiManager.getFiltersData()
-
+	 console.log('resFiltersData ====>',resFiltersData)
+	 
 	 if (resFiltersData?.data) {
 		const filtersConfig = [
 		  {
 			 name: 'title',
-			 title: 'Назва товару',
+			 title: 'Name',
 			 type: 'search',
 		  },
 		  {
@@ -165,45 +166,41 @@ document.addEventListener("DOMContentLoaded", async () => {
 		  //   })),
 		  // },
 		  {
-			 title: 'Продавець',
+			 title: 'Distributor',
 			 name: 'seller',
 			 type: 'selectMany',
 			 options: resFiltersData.data.users.map((item) => ({
-				title: item.username,
+				title: item.title,
 				value: item._id,
 			 })),
 		  },
 		]
-	filtersManager = new FiltersManager(
-		filtersConfig,
-		'.filters-container',
-		async () => {
-		  await loadProducts(0)
-		  //------------- додавання пагінації -----
-		  new PaginationManager({
-			 totalItemsNumber: pageData.totalItemsNumber,
-			 itemsPerPage: 4,
-			 currentPage: 0,
-			 containerSelector: '#pagination',
-			 onClick: async (page) => {
-				await loadProducts(page)
-			 },
-		  })
-		}
-	 )
-	 // Початкове завантаження
-	loadProducts(0)
+
+		filtersManager = new FiltersManager(
+			filtersConfig,
+			'.filters-container',
+			async () => {
+			  await loadProducts(0)
+			  //------------- додавання пагінації -----
+			 setupPagination()
+			}
+		 )
+	 }
 
 	// --------add Pagination --------
-	new PaginationManager({
-		totalItemsNumber: pageData.totalItemsNumber,
-		itemsPerPage: 4,
-		currentPage: 0,
-		containerSelector: '#pagination',
-		onClick: async (page) => {
-		  await loadProducts(page)
-		},
-	 })
+	function setupPagination() {
+		new PaginationManager({
+			totalItemsNumber: pageData.totalItemsNumber,
+			itemsPerPage: 4,
+			currentPage: pageData.currentPage ?? 0,
+			containerSelector: '#pagination',
+			onClick: async (page) => {
+			  await loadProducts(page)
+			},
+		 })
 	}
-	})
+
+		// Початкове завантаження
+		loadProducts(0)
+})
 

@@ -261,7 +261,7 @@ class BaseFilter {
 		 this.currentValue.push(value)
 	  }
 	  this.onChange()
-	}
+	} 
  
 	clear() {
 	  this.currentValue = []

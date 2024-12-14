@@ -2,11 +2,11 @@ class RequestManager {
 	// Базовий URL для API запитів
 	// static apiBase = "https://product-manager-node-js.onrender.com/api/v1"
 	// static apiUrl = "https://product-manager-node-js.onrender.com"
-	static apiBase = "mongodb://localhost:27017/api/v1"
-	static apiUrl = "mongodb://localhost:27017"
+	static apiBase = "http://localhost:3000/api/v1"
+	static apiUrl = "http://localhost:3000"
 	// Метод для отримання повного маршруту до сервера
 	static getServerRoute(path) {
-		return `${RequestManager.apiBase}${path}`;
+		return `${RequestManager.apiBase}${path}`
 	}
 	// Метод для перевірки автентифікації користувача
 	static isAuthenticated() {
@@ -142,7 +142,7 @@ class RequestManager {
 		if (file && file.type.startsWith("image/")) {
 			const reader = new FileReader();
 			reader.onload = function (e) {
-				const imgElement = document.querySelector(imgSelector);
+				const imgElement = document.querySelector(imgSelector)
 				imgElement.src = e.target.result;
 			};
 			reader.readAsDataURL(file);
@@ -165,18 +165,18 @@ class RequestManager {
 				const data = await response.json()
 				return data;
 			} else {
-				const result = await response.json();
+				const result = await response.json()
 				this.showErrors(result.errors)
 				return result
 			}
 		} catch (error) {
-			console.error("Error:", error);
-			this.showErrors([{ message: "Network error. Please try again later." }]);
+			console.error("Error:", error)
+			this.showErrors([{ message: "Network error. Please try again later." }])
 			return null
 		}
 	}
 	// Метод для отримання налаштувань
 	static async fetchSettings() {
-		return this.fetchData("/settings", false);
+		return this.fetchData("/settings", false)
 	}
 }
