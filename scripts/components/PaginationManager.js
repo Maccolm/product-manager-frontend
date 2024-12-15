@@ -23,7 +23,7 @@ class PaginationManager {
 	  this.totalPages = Math.ceil(totalItemsNumber / itemsPerPage)
 	  this.containerSelector = containerSelector
 	  this.onClick = onClick
- 
+	  
 	  // Рендеримо пагінацію
 	  this.render()
 	}

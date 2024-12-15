@@ -47,11 +47,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 				...pageData,
 				totalItemsNumber: resData.data?.count,
 			 }
-			 //тут буде прилітати щось інше
-			// const response = await RequestManager.fetchData(`/products`)
-			// console.log(response);
-			// loadProviders(response.providers)
-			const isAdmin = response.isAdmin || false
+
+			const isAdmin = resData.isAdmin || false
 			//перевірка на expired token
 			if (typeof isAdmin === "string") {
 				if (confirm(isAdmin)) {
@@ -64,13 +61,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 			// Очищення попередніх продуктів
 			productList.innerHTML = "";
 
-			if (response.length === 0) {
+			if (resData.data.documents.length === 0) {
 				productList.innerHTML = "<p>No products found</p>";
 				return;
 			}
 
 			//{products, providers}
-			response.products.forEach((product) => {
+			resData.data.documents.forEach((product) => {
 				const productContainer = document.createElement("div");
 				productContainer.className = "product__container";
 
@@ -167,9 +164,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 		  // },
 		  {
 			 title: 'Distributor',
-			 name: 'seller',
+			 name: 'provider',
 			 type: 'selectMany',
-			 options: resFiltersData.data.users.map((item) => ({
+			 options: resFiltersData.data.providers.map((item) => ({
 				title: item.title,
 				value: item._id,
 			 })),
