@@ -62,6 +62,7 @@ class PaginationManager {
 	  for (let i = 1; i <= this.totalPages; i++) {
 		 const li = document.createElement('li')
 		 const link = document.createElement('a')
+		 link.classList.add('page')
 		 link.href = '#'
 		 link.textContent = i
 		 if (i === this.currentPage + 1) {

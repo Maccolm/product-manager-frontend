@@ -1,10 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
 	const API_BASE = RequestManager.apiBase;
 	const productList = document.getElementById("productList");
-	const providerSelect = document.getElementById("provider");
-	const filterForm = document.getElementById("filterForm");
-	const clearFilter = document.getElementById("clearFilter");
-
 	let pageData = {}
 	let priceOrderSelector, filtersManager
 	 //функція застосування фільтрів
@@ -19,21 +15,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 		queryOptions.push(`sort=price:${priceOrderSelector.currentOrder}`)
 		return queryOptions.join('&')
 	 }
-
-	//load providers for filters
-	function loadProviders(providers) {
-		providerSelect.innerHTML = "";
-		const option = document.createElement("option");
-		option.value = "";
-		option.textContent = "Distributor";
-		providerSelect.append(option);
-		providers.forEach((provider) => {
-			const option = document.createElement("option");
-			option.value = provider._id;
-			option.textContent = provider.title;
-			providerSelect.append(option);
-		});
-	}
 
 	// Завантажити продукти
 	async function loadProducts(page = 0) {
@@ -61,13 +42,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 			// Очищення попередніх продуктів
 			productList.innerHTML = "";
 
-			if (resData.data.documents.length === 0) {
+			if (products === 0) {
 				productList.innerHTML = "<p>No products found</p>";
 				return;
 			}
 
 			//{products, providers}
-			resData.data.documents.forEach((product) => {
+			products.forEach((product) => {
 				const productContainer = document.createElement("div");
 				productContainer.className = "product__container";
 
@@ -92,7 +73,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 						: ""
 				}
 			`;
-				productList.append(productContainer);
+				productList.append(productContainer)
+				 //------------- додавання пагінації -----
+				setupPagination()
 			});
 		} catch (error) {
 			console.error("Error loading products:", error);
@@ -116,18 +99,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		}
 	}
 
-	// Фільтрація продуктів
-	filterForm.addEventListener("submit", (e) => {
-		e.preventDefault();
-		const filters = Object.fromEntries(new FormData(filterForm));
-		loadProducts(filters);
-	});
 
-	// Очищення фільтрів
-	clearFilter.addEventListener("click", () => {
-		filterForm.reset();
-		loadProducts(0);
-	});
 
 	 // Додавання селектора сортування
 	 priceOrderSelector = new PriceOrderSelector(
@@ -149,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		  },
 		  {
 			 name: 'price',
-			 title: 'price',
+			 title: 'Price',
 			 type: 'range',
 			 options: { min: 0, max: 1000 },
 		  },

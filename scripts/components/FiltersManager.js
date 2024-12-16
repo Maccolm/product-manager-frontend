@@ -100,9 +100,9 @@ class BaseFilter {
  
 	  // Встановлює внутрішній HTML-код контейнера з мітками та полями вводу для мінімального та максимального значень
 	  container.innerHTML = `
-		 <label>${title ?? name}:</label>
-		 <input type="number" min="${min}" max="${max}" name="${name}_min" placeholder="Від (From)">
-		 <input type="number" min="${min}" max="${max}" name="${name}_max" placeholder="До (To)">
+		 <label class="label-title">${title ?? name}:</label>
+		 <input type="number" min="${min}" max="${max}" name="${name}_min" placeholder="From" class="filter__input">
+		 <input type="number" min="${min}" max="${max}" name="${name}_max" placeholder="To" class="filter__input">
 	  `
  
 	  // Отримує посилання на елемент вводу для мінімального значення
@@ -177,7 +177,7 @@ class BaseFilter {
 		 )
 		 .join('')
 	  container.innerHTML = `
-		 <label>${title ?? name}:</label>
+		 <label class="label-title">${title ?? name}:</label>
 		 <select name="${name}_value">
 			${optionsHtml}
 		 </select>
@@ -205,11 +205,11 @@ class BaseFilter {
 	  const optionsHtml = options
 		 .map(
 			(option) =>
-			  `<label><input type="radio" name="${name}_value" value="${option.value}"> ${option.title}</label>`
+			  `<label><input type="radio" name="${name}_value" value="${option.value}" class="filter__input"> ${option.title}</label>`
 		 )
 		 .join('')
 	  container.innerHTML = `
-		 <label>${title ?? name}:</label>
+		 <label class="label-title">${title ?? name}:</label>
 		 ${optionsHtml}
 	  `
 	  this.inputs.radios = container.querySelectorAll(
@@ -241,8 +241,10 @@ class BaseFilter {
 		 )
 		 .join('')
 	  container.innerHTML = `
-		 <label>${title ?? name}:</label>
-		 ${optionsHtml}
+		 <label class="label-title">${title ?? name}:</label>
+		 <div class='options-container'>
+		 	${optionsHtml}
+		 </div>
 	  `
 	  this.inputs.checkboxes = container.querySelectorAll(
 		 `input[name="${name}_value:multiple"]`
@@ -281,10 +283,7 @@ class BaseFilter {
 	render() {
 	  const { name, title } = this.filterConfig
 	  const container = document.createElement('div')
-	  container.innerHTML = `
-		 <label>${title ?? name}:</label>
-		 <input type="text" name="${name}_value">
-	  `
+	  container.innerHTML = `<input type="text" name="${name}_value" placeholder="${title ?? name}" class="filter__input">`
 	  this.inputs.search = container.querySelector(`input[name="${name}_value"]`)
 	  return container
 	}
@@ -318,7 +317,9 @@ class BaseFilter {
  
 	  // Створюємо кнопку "Очистити"
 	  const clearButton = document.createElement('button')
-	  clearButton.textContent = 'Очистити'
+	  clearButton.classList.add('product__btn')
+	  clearButton.classList.add('filter__btn')
+	  clearButton.textContent = 'Clear Filter'
 	  clearButton.addEventListener('click', () => this.clearAllFilters())
  
 	  // Додаємо фільтри до контейнера

@@ -1,0 +1,87 @@
+.base-container{
+	margin: 15px 0;
+	padding: 0 15px;
+	width: 100%;
+	display: flex;
+	gap: 30px;
+	justify-content: start;
+}
+.filters-container{
+	padding: 10px 5px;
+	border: 1px solid gray;
+	border-radius: 8px;
+	height: fit-content;
+	flex: 0 1 200px;
+}
+.filter{
+	padding: 10px;
+}
+.filter > label {
+	display: block;
+	margin-bottom: 5px;
+}
+.filter__input{
+	margin: 10px 0;
+}
+.label-title, .price-order-label {
+	color: #6e2d89;
+	font-size: 18px;
+}
+.title{
+	text-align: center;
+	margin: 0;
+}
+.options-container {
+	margin-left: 15px;
+	margin-bottom: 15px;
+	display: flex;
+	flex-direction: column;
+}
+.filter__btn{
+	display: block;
+	margin: 0 auto;
+}
+.price-order-label {
+	margin-right: 10px;
+}
+.price-order-dropdown{
+	padding: 10px;
+	border: none;
+	border-radius: 6px;
+}
+/* pagination */
+ul{
+	list-style: none;
+}
+.pagination{
+	display: flex;
+	gap: 12px;
+}
+.page {
+	display: block;
+	position: relative;
+	width: 18px;
+	text-align: center;
+}
+.page::before{
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 18px;
+	width: 100%;
+	border-radius: 50%;
+	background-color: transparent;
+	transition: background-color 0.2s ease 0s;
+}
+.page:hover::before{
+	background-color: #6d2d892e;
+}
+.disabled a {
+	pointer-events: none;
+	color: rgb(165, 165, 165);
+}
+.pagination a:hover{
+	color: #6e2d89;
+	transition: 0.2s ease 0s;
+}
