@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
 	const API_BASE = RequestManager.apiBase;
 	const productList = document.getElementById("productList");
-	let pageData = {}
+	let pageData = {
+		currentPage: 0,
+	}
 	let priceOrderSelector, filtersManager
 	let loading = false
 	 //функція застосування фільтрів
@@ -74,7 +76,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 				productList.append(productContainer)
 				//increase number of the page for the next loading
 			})
-			pageData.currentPage++
+			if(products.length !== 0) {
+				pageData.currentPage++
+			}
 		} catch (error) {
 			console.error("Error loading products:", error)
 		} finally {
