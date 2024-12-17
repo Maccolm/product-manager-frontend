@@ -74,7 +74,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 				productList.append(productContainer)
 				//increase number of the page for the next loading
 			})
-			pageData.currentPage++
+			if(products.length !== 0) {
+				pageData.currentPage++
+			}
 		} catch (error) {
 			console.error("Error loading products:", error)
 		} finally {
