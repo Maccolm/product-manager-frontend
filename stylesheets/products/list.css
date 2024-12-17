@@ -6,12 +6,25 @@
 	gap: 30px;
 	justify-content: start;
 }
+.content-container {
+	flex: 1 1 100%;
+}
+.content-container__aside {
+	padding-top: 30px;
+	padding-left: 250px;
+}
 .filters-container{
+	max-width: 200px;
 	padding: 10px 5px;
 	border: 1px solid gray;
 	border-radius: 8px;
 	height: fit-content;
 	flex: 0 1 200px;
+}
+.filters-container__fixed {
+	position: fixed;
+	left: 30px;
+	top: 120px;
 }
 .filter{
 	padding: 10px;
@@ -43,6 +56,11 @@
 }
 .price-order-label {
 	margin-right: 10px;
+}
+.price-order-container__fixed {
+	position: fixed;
+	top: 70px;
+	left: 30px;
 }
 .price-order-dropdown{
 	padding: 10px;
@@ -84,4 +102,9 @@ ul{
 .pagination a:hover{
 	color: #6e2d89;
 	transition: 0.2s ease 0s;
+}
+.main-page__btn-fixed {
+	position: fixed;
+	left: 30px;
+	top: 30px;
 }

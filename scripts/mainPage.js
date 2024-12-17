@@ -31,6 +31,7 @@ class HeaderManager {
 	  const buttons = [
 		 { text: "About us", href: "about.html" },
 		 { text: "Products", href: "pages/products/list.html" },
+		 { text: "Products scroll page", href: "pages/products/scroll-list.html" },
 		 ...(user ? [{ text: "Add product", href: "pages/products/product-form.html" }] : []),
 		 { text: "Users", href: "pages/users/list.html" },
 		 user
