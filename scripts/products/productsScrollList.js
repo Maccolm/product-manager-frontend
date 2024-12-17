@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
 	const API_BASE = RequestManager.apiBase;
 	const productList = document.getElementById("productList");
-	let pageData = {}
+	let pageData = {
+		currentPage: 0,
+	}
 	let priceOrderSelector, filtersManager
 	let loading = false
 	 //функція застосування фільтрів
