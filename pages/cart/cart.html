@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../../stylesheets/style.css">
+	<title>Cart</title>
+	<script src="../../scripts/RequestManager.js"></script>
+	<script src="../../scripts/api/BaseApiManager.js"></script>
+</head>
+<body>
+	<a class="main-page__btn" href="../../index.html"><span class="main-page__btn-span"></span> To The Main Page</a>
+	<div class="base-container">
+		<div class="price-order-container"></div>
+		<div id="table-container"></div>
+		<h1 id="total-price-container"></h1>	
+	</div>
+	 <!-- Спіннер завантаження -->
+	 <div class="loading" id="loading-spinner" style="display: none">
+		<div class="spinner"></div>
+		Loading...
+	 </div>
+	<div class="error-message" id="error-message" style="display: none">Error to load data</div>
+
+	<script>
+		window.onload = async function () {
+			// Функція для видалення продукту за ідентифікатором
+			async function deleteFunction(id) {
+				await CartApiManager.delete(id)
+				// window.location.reload()
+			}
+
+			// Функція для отримання даних та відображення продуктів
+			async function fetchDataAndDisplay(page = 0) {
+				const loadingSpinner = document.getElementById('loading-spinner')
+				const errorMessage = document.getElementById('error-message')
+				const tableContainer = document.getElementById('table-container')
+
+				try {
+					loadingSpinner.style.display = 'block'
+					tableContainer.innerHTML = ''
+					errorMessage.style.display = 'none'
+
+					// Отримання даних продуктів з сервера
+					const resData = await CartApiManager.getList()
+					console.log(resData)
+					
+
+					let productsList = resData?.data?.products
+
+					if (productsList) {
+					if (productsList.length === 0) {
+						document.getElementById('table-container').innerText =
+							'Cart is empty'
+						return
+					}
+					// Обробка зображень продуктів
+					productsList.forEach((prod) => {
+						Object.assign(prod, {
+							...prod.details,
+							sellerName: prod.seller.name,
+							sellerType: prod.seller.type,
+							sellerId: prod.seller._id,
+						})
+
+						if (prod.image && !prod.image.startsWith('data:'))
+							prod.image = 'data:image;base64,' + prod.image
+					})
+					// Поля для відобржаення у таблиці
+					const fields = {
+						image: '',
+						title: 'Title',
+						price: 'Price',
+						sellerName: {
+							type: 'a',
+							title: 'Seller',
+							linkGetter: (item) =>
+							`${headerManager.basePath}products/seller_products.html?id=${item.sellerId}`,
+							contentGetter: (item) => item.sellerName,
+						},
+						sellerType: 'Seller Type',
+						amount: 'Amount',
+						totalProductsPrice: 'Total',
+
+						subtract: {
+							type: 'button',
+							title: '',
+							isDisabled: (item) => item.amount == 1,
+							onClick: (item) => {
+							CartApiManager.updateProductsAmount(
+								item._id,
+								item.amount - 1
+							)
+								.then(async () => {
+									await fetchDataAndDisplay(0)
+								})
+								.catch(() =>
+									alert('Error, count is not decreased!')
+								)
+							},
+							contentGetter: (item) => '-',
+						},
+						add: {
+							type: 'button',
+							title: '',
+							isDisabled: (item) => false,
+							onClick: (item) => {
+							CartApiManager.updateProductsAmount(
+								item._id,
+								item.amount + 1
+							)
+								.then(async () => {
+									await fetchDataAndDisplay(0)
+								})
+								.catch(() =>
+									alert('Error, amount is not increased !')
+								)
+							},
+							contentGetter: (item) => '+',
+						},
+					}
+
+					// Створення таблиці продуктів
+					const table = ListDataManager.createTableFromList(
+						productsList,
+						fields,
+						null,
+						deleteFunction
+					)
+
+					tableContainer.append(table)
+
+					document.getElementById(
+						'total-price-container'
+					).innerText = `Total to pay : ${resData.data.total} $.`
+					} else {
+					throw new Error('Data is missing')
+					}
+				} catch (error) {
+					console.error('Error to load data', error)
+					errorMessage.style.display = 'block'
+				} finally {
+					loadingSpinner.style.display = 'none'
+				}
+			}
+
+			// Виклик функції для отримання та відображення даних
+			await fetchDataAndDisplay(0)
+			}
+	</script>
+</body>
+</html>

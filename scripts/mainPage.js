@@ -34,6 +34,7 @@ class HeaderManager {
 		 { text: "Products scroll page", href: "pages/products/scroll-list.html" },
 		 ...(user ? [{ text: "Add product", href: "pages/products/product-form.html" }] : []),
 		 { text: "Users", href: "pages/users/list.html" },
+		 { text: "Cart", href: "pages/cart/cart.html" },
 		 user
 			? { text: `Logout (${user.username})`, href: "/auth/logout" }
 			: { text: "Login", href: "auth/login.html" },
