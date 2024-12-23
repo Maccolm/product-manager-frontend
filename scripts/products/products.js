@@ -9,6 +9,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 		  `page=${pageData.currentPage ?? 0}`,
 		  `perPage=${pageData.perPage ?? 4}`,
 		]
+		// Отримуємо параметр 'provider' з URL
+		const urlParams = new URLSearchParams(window.location.search)
+		const providerId = urlParams.get('provider')
+		// Якщо параметр 'provider' в URL вказаний, додаємо його до запиту
+		if (providerId) queryOptions.push(`provider=${providerId}`)
 		const filtersQueryString = filtersManager.getQueryString()
 		if (filtersQueryString) queryOptions.push(filtersQueryString)
 
@@ -117,8 +122,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 			}
 		}
 	}
-
-
 
 	 // Додавання селектора сортування
 	 priceOrderSelector = new PriceOrderSelector(

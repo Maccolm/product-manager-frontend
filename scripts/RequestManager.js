@@ -104,16 +104,16 @@ class RequestManager {
 	static async postRequest(route, body, addAuthorization = true) {
 		const headers = { "Content-Type": "application/json" };
 		if (addAuthorization && RequestManager.isAuthenticated()) {
-			headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`;
+			headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`
 		}
 		console.log('route', route);
 		console.log('body', body);
 		
-		const response = await fetch(route, {
+		const response = await fetch(this.getServerRoute(route), {
 			method: "POST",
 			headers: headers,
 			body: JSON.stringify(body),
-		});
+		})
 		const data = await response.json()
 		return data;
 	}

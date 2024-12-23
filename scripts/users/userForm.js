@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	const form = document.getElementById("register-form");
 	const errorContainer = document.getElementById("error-container");
 	const typeSelect = document.getElementById("type");
-	const API_BASE = RequestManager.apiBase
 	const inputs = document.querySelectorAll('input')
 	console.log(inputs);
 	
@@ -62,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		const params = new URLSearchParams(window.location.search)
 		const userId = params.get("id")
 		try {
-			const response = await RequestManager.postRequest(`${API_BASE}/users/register/${userId ? userId : ''}`, data)
+			const response = await RequestManager.postRequest(`/users/register/${userId ? userId : ''}`, data)
 			console.log(response)
 			
 			if (response) {

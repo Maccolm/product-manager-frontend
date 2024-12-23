@@ -1,5 +1,5 @@
 class BaseApiManager {
-	constructor(routeBase = '') {
+	constructor(routeBase = RequestManager.apiBase) {
 	  this.routeBase = routeBase
 	}
 	async getList(params) {

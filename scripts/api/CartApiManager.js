@@ -1,5 +1,6 @@
 class CartApiManagerClass extends BaseApiManager {
 	async addToCart(productId) {
+		
 	  return RequestManager.postRequest(this.routeBase, { productId })
 	}
 	async updateProductsAmount(productId, amount) {
@@ -10,4 +11,4 @@ class CartApiManagerClass extends BaseApiManager {
 	}
  }
  
- const CartApiManager = new CartApiManagerClass('/cart')
+ const CartApiManager = new CartApiManagerClass(`/cart`)

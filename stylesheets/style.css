@@ -19,6 +19,9 @@ a{
 	text-decoration: none;
 	color: #030403;
 }
+a:hover{
+	text-decoration: underline;
+}
 body {
 	font-family: Roboto Condensed;
 	background-color: #f9f9f9;
@@ -83,6 +86,7 @@ img {
 .container{
 	margin: auto;
 	display: flex;
+	flex-wrap: wrap;
 	gap: 20px;
 	justify-content: center;
 }

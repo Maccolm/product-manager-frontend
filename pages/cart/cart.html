@@ -4,9 +4,13 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="../../stylesheets/style.css">
+	<link rel="stylesheet" href="../../stylesheets/cart.css">
+	<link rel="shortcut icon" href="../../images/icon-favicon.png" type="image/x-icon">
 	<title>Cart</title>
 	<script src="../../scripts/RequestManager.js"></script>
 	<script src="../../scripts/api/BaseApiManager.js"></script>
+	<script src="../../scripts/api/CartApiManager.js"></script>
+	<script src="../../scripts/components/ListDataManager.js"></script>
 </head>
 <body>
 	<a class="main-page__btn" href="../../index.html"><span class="main-page__btn-span"></span> To The Main Page</a>
@@ -40,11 +44,13 @@
 					loadingSpinner.style.display = 'block'
 					tableContainer.innerHTML = ''
 					errorMessage.style.display = 'none'
-
+					if(!isLoggedIn()) {
+						alert('You are not logged in! Please log in to view your cart')
+						window.location.href = '../../auth/login.html'
+					}
 					// Отримання даних продуктів з сервера
 					const resData = await CartApiManager.getList()
 					console.log(resData)
-					
 
 					let productsList = resData?.data?.products
 
@@ -58,27 +64,27 @@
 					productsList.forEach((prod) => {
 						Object.assign(prod, {
 							...prod.details,
-							sellerName: prod.seller.name,
-							sellerType: prod.seller.type,
-							sellerId: prod.seller._id,
 						})
-
-						if (prod.image && !prod.image.startsWith('data:'))
-							prod.image = 'data:image;base64,' + prod.image
 					})
-					// Поля для відобржаення у таблиці
+					// Поля для відображення у таблиці
 					const fields = {
-						image: '',
-						title: 'Title',
+						image: {
+							type: 'a',
+							contentGetter: (item) => `${RequestManager.apiUrl}/uploads/${item.imgSrc}`,
+							linkGetter: (item) => `../products/product-details.html?id=${item._id}`,
+							alt: 'Image',
+						},
+						title: {
+							type: 'a',
+							title:'Title',
+							linkGetter: (item) =>
+							`../products/product-details.html?id=${item._id}`,
+							contentGetter: (item) => item.title,
+						},
 						price: 'Price',
 						sellerName: {
-							type: 'a',
 							title: 'Seller',
-							linkGetter: (item) =>
-							`${headerManager.basePath}products/seller_products.html?id=${item.sellerId}`,
-							contentGetter: (item) => item.sellerName,
 						},
-						sellerType: 'Seller Type',
 						amount: 'Amount',
 						totalProductsPrice: 'Total',
 
@@ -147,6 +153,11 @@
 			// Виклик функції для отримання та відображення даних
 			await fetchDataAndDisplay(0)
 			}
+			// Перевірка автентифікації
+	function isLoggedIn() {
+		return !!localStorage.getItem("jwt_token");
+	}
+
 	</script>
 </body>
 </html>
