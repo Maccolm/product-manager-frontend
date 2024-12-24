@@ -17,7 +17,7 @@ class ListDataManager {
 	  }
 	  if (deleteFunction) {
 		 const deleteTh = document.createElement('th')
-		 deleteTh.textContent = 'delete'
+		 deleteTh.textContent = 'Delete'
 		 headerRow.append(deleteTh)
 	  }
 	  thead.append(headerRow)
@@ -49,6 +49,7 @@ class ListDataManager {
 			const btn = document.createElement('button')
 			btn.onclick = fields[key].onClick.bind(null, item)
 			btn.innerText = fields[key].contentGetter(item)
+			btn.className = 'product__btn'
 			if (fields[key].isDisabled?.(item)) {
 			  btn.setAttribute('disabled', true)
 			}
@@ -56,8 +57,8 @@ class ListDataManager {
 		 } else if (typeof fields[key] === 'object') {
 			//повертаємо сторінку з продуктами по постачальнику
 			const link = document.createElement('a')
-			link.href = `../products/list.html?provider=${item.provider._id}`
-			link.textContent = ListDataManager.capitalizeFirstLetter(item.provider.title)
+			link.href = `../products/list.html?provider=${item.details.provider._id}`
+			link.textContent = ListDataManager.capitalizeFirstLetter(item.details.provider.title)
 			td.append(link)
 		} else {
 			td.textContent = item[key]
@@ -77,7 +78,8 @@ class ListDataManager {
 		 const deleteTd = document.createElement('td')
 		 const deleteButton = document.createElement('button')
 		 deleteButton.textContent = 'Delete'
-		 deleteButton.onclick = () => deleteFunction(item._id)
+		 deleteButton.className = 'product__btn'
+		 deleteButton.onclick = () => deleteFunction(item.details._id)
 		 deleteTd.append(deleteButton)
 		 row.append(deleteTd)
 	  }

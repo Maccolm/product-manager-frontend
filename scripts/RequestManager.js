@@ -100,6 +100,21 @@ class RequestManager {
 		return data;
 	}
 
+	// Загальний метод для виконання PUT запиту
+	static async putRequest(route, body, addAuthorization = true) {
+		const headers = { "Content-Type": "application/json" };
+		if (addAuthorization && RequestManager.isAuthenticated()) {
+			headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`
+		}
+		
+		const response = await fetch(this.getServerRoute(route), {
+			method: "PUT",
+			headers: headers,
+			body: JSON.stringify(body),
+		})
+		const data = await response.json()
+		return data
+	}
 	// Загальний метод для виконання POST запиту
 	static async postRequest(route, body, addAuthorization = true) {
 		const headers = { "Content-Type": "application/json" };
@@ -160,10 +175,10 @@ class RequestManager {
 			response = await fetch(this.getServerRoute(url), {
 				method: "GET",
 				headers: headers,
-			});
+			})
 			if (response.ok) {
 				const data = await response.json()
-				return data;
+				return data
 			} else {
 				const result = await response.json()
 				this.showErrors(result.errors)

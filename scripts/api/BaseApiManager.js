@@ -1,6 +1,7 @@
 class BaseApiManager {
 	constructor(routeBase = RequestManager.apiBase) {
 	  this.routeBase = routeBase
+	  this.apiBase = RequestManager.apiBase
 	}
 	async getList(params) {
 	  let route = this.routeBase
@@ -45,7 +46,8 @@ class BaseApiManager {
 	}
  
 	async delete(id) {
-	  return RequestManager.deleteRequest(this.routeBase, id)
+		
+	  return RequestManager.deleteRequest(`${this.apiBase}/${this.routeBase}`, id)
 	}
  
 	showErrors(errors, errorsContainerSelector = '#errors') {

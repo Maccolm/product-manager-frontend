@@ -52,6 +52,13 @@
 					const resData = await CartApiManager.getList()
 					console.log(resData)
 
+					//Перевірка на token expired
+					if(resData.error) {
+						alert(resData.message)
+						localStorage.removeItem('jwt_token')
+						window.location.href = '../../auth/login.html'
+					}
+
 					let productsList = resData?.data?.products
 
 					if (productsList) {
@@ -60,26 +67,20 @@
 							'Cart is empty'
 						return
 					}
-					// Обробка зображень продуктів
-					productsList.forEach((prod) => {
-						Object.assign(prod, {
-							...prod.details,
-						})
-					})
 					// Поля для відображення у таблиці
 					const fields = {
 						image: {
 							type: 'a',
-							contentGetter: (item) => `${RequestManager.apiUrl}/uploads/${item.imgSrc}`,
-							linkGetter: (item) => `../products/product-details.html?id=${item._id}`,
+							contentGetter: (item) => `${RequestManager.apiUrl}/uploads/${item.details.imgSrc}`,
+							linkGetter: (item) => `../products/product-details.html?id=${item.details._id}`,
 							alt: 'Image',
 						},
 						title: {
 							type: 'a',
 							title:'Title',
 							linkGetter: (item) =>
-							`../products/product-details.html?id=${item._id}`,
-							contentGetter: (item) => item.title,
+							`../products/product-details.html?id=${item.details._id}`,
+							contentGetter: (item) => item.details.title,
 						},
 						price: 'Price',
 						sellerName: {
@@ -94,7 +95,7 @@
 							isDisabled: (item) => item.amount == 1,
 							onClick: (item) => {
 							CartApiManager.updateProductsAmount(
-								item._id,
+								item.details._id,
 								item.amount - 1
 							)
 								.then(async () => {
@@ -112,7 +113,7 @@
 							isDisabled: (item) => false,
 							onClick: (item) => {
 							CartApiManager.updateProductsAmount(
-								item._id,
+								item.details._id,
 								item.amount + 1
 							)
 								.then(async () => {
