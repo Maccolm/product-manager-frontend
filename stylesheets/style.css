@@ -193,9 +193,7 @@ img {
 	border: none;
 	border-radius: 6px;
 }
-.filter__btn{
-	margin-right: 10px;
-}
+
 .product__text {
 	text-transform: capitalize;
 	font-size: 18px;
@@ -205,4 +203,14 @@ img {
 }
 .actions {
 	margin-top: 25px;
+}
+/* cart======================== */
+.cart::after {
+	content: "";
+	position: relative;
+	left: 3px;
+	display: inline-block;
+	background: url(../images/cart-icon.svg) no-repeat;
+	height: 15px;
+	width: 15px;
 }

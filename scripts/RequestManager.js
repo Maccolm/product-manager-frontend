@@ -146,7 +146,7 @@ class RequestManager {
 		if(data.error){
 			alert(data.error)
 		} else {
-			window.location.reload(true)
+			response.success
 		}
 		return data
 	}

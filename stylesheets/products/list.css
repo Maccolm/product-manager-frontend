@@ -1,3 +1,17 @@
+.cart__fixed{
+	position: fixed;
+	left: 33px;
+	top: 565px;
+	width: 175px;
+	text-align: center;
+}
+.header-container {
+	max-width: 100%;
+	gap: 10px;
+	flex-wrap: wrap;
+	display: flex;
+	justify-content: space-between;
+}
 .base-container{
 	margin: 15px 0;
 	padding: 0 15px;
@@ -53,6 +67,7 @@
 .filter__btn{
 	display: block;
 	margin: 0 auto;
+	width: 200px;
 }
 .price-order-label {
 	margin-right: 10px;

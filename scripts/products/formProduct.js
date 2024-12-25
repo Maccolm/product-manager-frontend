@@ -12,11 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
 		try {
 			const params = new URLSearchParams(window.location.search)
 			const productId = params.get("id")
+console.log('run init Form');
 
 			if (productId) {
-				const response = await fetch(`${API_BASE}/products/${productId}`);
-				if (!response.ok) throw new Error("Failed to fetch product details")
-				const data = await response.json();
+				const data = await RequestManager.fetchData(`/products/${productId}`)
+			
 				const product = data.product
 				// Заповнення полів, якщо це редагування
 				if (product) {

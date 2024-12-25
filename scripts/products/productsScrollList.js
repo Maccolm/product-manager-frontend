@@ -72,6 +72,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 					  </div>`
 						: ""
 				}
+				${
+					isLoggedIn() ? `<button id='buy-btn' onclick="addProductToCart('${product._id}')" class="product__btn cart">Add To Cart</button>` : ''
+				}
 			`;
 				productList.append(productContainer)
 				//increase number of the page for the next loading
@@ -85,7 +88,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 			loading = false
 		}
 	}
-
+	// add Product to Card
+	window.addProductToCart = async function (productId) {
+		const buyBtn = document.getElementById('buy-btn')
+		buyBtn.disabled = true
+		try {
+			const response = await CartApiManager.addToCart(productId)
+			console.log(response)
+			if (response) {
+				buyBtn.disabled = false
+				return alert('Product added to cart')
+			}
+		} catch (error) {
+			console.log('Error to add product', error);
+			alert('Product was not added to cart')
+			buyBtn.disabled = false
+		}
+	}
 	// Перевірка автентифікації
 	function isLoggedIn() {
 		return !!localStorage.getItem("jwt_token");

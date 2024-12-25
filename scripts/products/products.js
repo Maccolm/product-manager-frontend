@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 						: ""
 				}
 				${
-					isLoggedIn() ? `<button id='buy-btn' onclick="addProductToCart('${product._id}')" class="product__btn">Add To Cart</button>` : ''
+					isLoggedIn() ? `<button id='buy-btn' onclick="addProductToCart('${product._id}')" class="product__btn cart">Add To Cart</button>` : ''
 				}
 			`;
 				productList.append(productContainer)
@@ -116,19 +116,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 	window.deleteProduct = async function (productId) {
 		if(confirm('Are you sure you want to delete product?')){
 			try {
-				RequestManager.deleteRequest(`${API_BASE}/products/`, productId)
+				await RequestManager.deleteRequest(`${API_BASE}/products/`, productId)
 				loadProducts() // Оновлення списку продуктів
 			} catch (error) {
 				console.error("Error deleting product:", error)
 			}
 		}
 	}
-
-	 // Додавання селектора сортування
-	 priceOrderSelector = new PriceOrderSelector(
-		'.price-order-container',
-		() => loadProducts(0)
-	 )
+	if(document.querySelector('.price-order-container')){
+		// Додавання селектора сортування
+		priceOrderSelector = new PriceOrderSelector(
+		  '.price-order-container',
+		  () => loadProducts(0)
+		)
+	}
 
 	 //----------------------
 	 // Отримання даних продуктів з сервера
@@ -168,16 +169,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 		  },
 		]
 
-		filtersManager = new FiltersManager(
-			filtersConfig,
-			'.filters-container',
-			async () => {
-			  await loadProducts(0)
-			  //------------- додавання пагінації -----
-			 setupPagination()
-			}
-		 )
-	 }
+		if(document.querySelector('.filters-container')) {
+			filtersManager = new FiltersManager(
+				filtersConfig,
+				'.filters-container',
+				async () => {
+				  await loadProducts(0)
+				  //------------- додавання пагінації -----
+				 setupPagination()
+				}
+			 )
+		 }
+		}
 
 	// --------add Pagination --------
 	function setupPagination() {

@@ -15,16 +15,25 @@ document.addEventListener("DOMContentLoaded", () => {
 		 }
  
 		 // Виклик API для отримання деталей продукту
-		 const response = await fetch(`${API_BASE}/products/${productId}`);
-		 if (!response.ok) throw new Error("Failed to fetch product details")
- 
-		 const data = await response.json()
+		 const data = await RequestManager.fetchData(`/products/${productId}`)
+		 
 		 if(!data) {
 			productDetailsContainer.innerHTML = "<p>No product data found.</p>";
 			return
 		 }
+		 
+		 const isAdmin = data.isAdmin || false
+		 //перевірка на expired token
+		 if (typeof isAdmin === "string") {
+			 if (confirm(isAdmin)) {
+				 window.location.href = "../../auth/login.html"
+				 localStorage.removeItem("jwt_token")
+			 } else {
+				 localStorage.removeItem("jwt_token")
+			 }
+		 }
 		 // Рендеринг деталей продукту
-		 renderProductDetails(data)
+		 renderProductDetails(data, isAdmin)
 	  } catch (error) {
 		 console.error("Error loading product details:", error);
 		 productDetailsContainer.innerHTML = "<p>Error loading product details.</p>";
@@ -32,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
  
 	// Рендеринг продукту
-	function renderProductDetails(data) {
+	function renderProductDetails(data, isAdmin) {
 		const product = data.product
 	  const distributor = product.provider?.title || "Unknown";
  
@@ -56,12 +65,14 @@ document.addEventListener("DOMContentLoaded", () => {
 			  </p>
 			</div>
 			<span class="divider"></span>
-			${isLoggedIn() ? `
+			${isLoggedIn() && isAdmin? `
 			  <div class="product__actions actions">
-				 <a href="/products/edit/${product.id}" class="product__btn">Edit</a>
-				 <button onclick="deleteProduct('${product.id}')" class="product__btn">Delete</button>
+				 <a href="product-form.html?id=${product._id}" class="product__btn">Edit</a>
+				 <button onclick="deleteProduct('${product._id}')" class="product__btn">Delete</button>
 			  </div>
 			` : ""}
+			<button id='buy-btn' onclick="addProductToCart('${product._id}')" class="product__btn cart">Add To Cart</button>
+			<a href="../cart/cart.html" class="product__btn cart">Cart</a>
 		 </div>
 	  `;
 	}
@@ -70,26 +81,41 @@ document.addEventListener("DOMContentLoaded", () => {
 	function isLoggedIn() {
 	  return !!localStorage.getItem("jwt_token");
 	}
- 
-	// Видалення продукту
-	async function deleteProduct(productId) {
-	  try {
-		 const token = localStorage.getItem("jwt_token");
-		 const response = await fetch(`${API_BASE}/products/${productId}`, {
-			method: "DELETE",
-			headers: { Authorization: `Bearer ${token}` },
-		 });
- 
-		 if (response.ok) {
-			alert("Product deleted successfully!");
-			window.location.href = "list.html";
-		 } else {
-			alert("Failed to delete product.");
-		 }
-	  } catch (error) {
-		 console.error("Error deleting product:", error);
-	  }
+	// add Product to Card
+	window.addProductToCart = async function (productId) {
+		console.log('productId', productId);
+		
+		const buyBtn = document.getElementById('buy-btn')
+		buyBtn.disabled = true
+		try {
+			const response = await CartApiManager.addToCart(productId)
+			console.log(response)
+			if (response) {
+				buyBtn.disabled = false
+				return alert('Product added to cart')
+			}
+		} catch (error) {
+			console.log('Error to add product', error);
+			alert('Product was not added to cart')
+			buyBtn.disabled = false
+		}
 	}
+ 
+		// Видалення продукту
+		window.deleteProduct = async function (productId) {
+			if(confirm('Are you sure you want to delete product?')){
+				try {
+					const response = await RequestManager.deleteRequest(`${API_BASE}/products/`, productId)
+					if(response.success){ 
+						setTimeout(() => {
+							window.location.href='./list.html' // Оновлення списку продуктів
+						},100)
+					}
+				} catch (error) {
+					console.error("Error deleting product:", error)
+				}
+			}
+		}
  
 	// Завантаження деталей продукту при завантаженні сторінки
 	loadProductDetails()

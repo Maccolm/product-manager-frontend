@@ -34,17 +34,18 @@ class HeaderManager {
 		 { text: "Products scroll page", href: "pages/products/scroll-list.html" },
 		 ...(user ? [{ text: "Add product", href: "pages/products/product-form.html" }] : []),
 		 { text: "Users", href: "pages/users/list.html" },
-		 { text: "Cart", href: "pages/cart/cart.html" },
+		 { text: "Cart", href: "pages/cart/cart.html", classNameCart: 'cart'},
 		 user
 			? { text: `Logout (${user.username})`, href: "/auth/logout" }
 			: { text: "Login", href: "auth/login.html" },
 	  ];
  
-	  buttons.forEach(({ text, href }) => {
+	  buttons.forEach(({ text, href, classNameCart }) => {
 		 const btn = document.createElement("a");
-		 btn.textContent = text;
-		 btn.href = href;
-		 btn.className = "product__btn";
+		 btn.textContent = text
+		 btn.href = href
+		 btn.className = "product__btn"
+		 if(classNameCart) btn.classList.add(classNameCart)
 		 btn.addEventListener("click", (e) => this.handleNavigation(e, href));
 		 content.appendChild(btn);
 	  });
