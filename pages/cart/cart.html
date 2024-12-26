@@ -53,10 +53,15 @@
 					console.log(resData)
 
 					//Перевірка на token expired
-					if(resData.error) {
+					if(resData.error && resData.message) {
 						alert(resData.message)
 						localStorage.removeItem('jwt_token')
 						window.location.href = '../../auth/login.html'
+					} else if (resData.error) {
+						console.log(resData.error)
+							document.getElementById('table-container').innerText =
+							'Cart is empty'
+							return
 					}
 
 					let productsList = resData?.data?.products
