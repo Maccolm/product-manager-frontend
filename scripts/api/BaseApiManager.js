@@ -1,7 +1,10 @@
 class BaseApiManager {
-	constructor(routeBase = RequestManager.apiBase) {
+	constructor(routeBase = RequestManager.apiBase, model) {
 	  this.routeBase = routeBase
 	  this.apiBase = RequestManager.apiBase
+	  if (model) {
+		this.permissions = pagesPermissions[model]
+	  }
 	}
 	async getList(params) {
 	  let route = this.routeBase

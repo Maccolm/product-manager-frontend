@@ -26,13 +26,12 @@ class HeaderManager {
 	  if (token) {
 		 user = this.decodeToken(token)
 		 console.log(user);
-		 
 	  }
 	  const buttons = [
 		 { text: "About us", href: "about.html" },
 		 { text: "Products", href: "pages/products/list.html" },
 		 { text: "Products scroll page", href: "pages/products/scroll-list.html" },
-		 ...(user ? [{ text: "Add product", href: "pages/products/product-form.html" }] : []),
+		 ...(UsersApiManager.permissions?.create ? [{ text: "Add product", href: "pages/products/product-form.html" }] : []),
 		 { text: "Users", href: "pages/users/list.html" },
 		 { text: "Cart", href: "pages/cart/cart.html", classNameCart: 'cart'},
 		 user
