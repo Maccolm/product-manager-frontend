@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 				 <p class="product__text"><span>Distributor:</span> ${distributor}</p>
 			  </div>
 			  ${
-					isLoggedIn() && isAdmin
+					RequestManager.isAuthenticated() && ProductsApiManager.permissions?.update
 						? `<div class="product__actions actions">
 						 <a href="product-form.html?id=${product._id}" class="product__btn">Edit</a>
 						 <button onclick="deleteProduct('${product._id}')" class="product__btn">Delete</button>
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 						: ""
 				}
 				${
-					isLoggedIn() ? `<button id='buy-btn' onclick="addProductToCart('${product._id}')" class="product__btn cart">Add To Cart</button>` : ''
+					RequestManager.isAuthenticated() ? `<button id='buy-btn' onclick="addProductToCart('${product._id}')" class="product__btn cart">Add To Cart</button>` : ''
 				}
 			`;
 				productList.append(productContainer)
@@ -106,10 +106,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 			alert('Product was not added to cart')
 			buyBtn.disabled = false
 		}
-	}
-	// Перевірка автентифікації
-	function isLoggedIn() {
-		return !!localStorage.getItem("jwt_token");
 	}
 
 	// Видалення продукту

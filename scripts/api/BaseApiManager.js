@@ -2,7 +2,9 @@ class BaseApiManager {
 	constructor(routeBase = RequestManager.apiBase, model) {
 	  this.routeBase = routeBase
 	  this.apiBase = RequestManager.apiBase
-	  if (model) {
+	  const savedPermissions = localStorage.getItem('permissions')
+	  const pagesPermissions = savedPermissions ? JSON.parse(savedPermissions) : null
+	  if (model && pagesPermissions) {
 		this.permissions = pagesPermissions[model]
 	  }
 	}

@@ -43,8 +43,11 @@
 					loginBtn.disabled = true
 					try {
 						const response = await LoginApiManager.login(formData, (data) => {
+							console.log('data from login ===>', data);
+							
 							//------- зберігаємо токен у localStorage ---------------------
 							localStorage.setItem("jwt_token", data.token)
+							localStorage.setItem('permissions', JSON.stringify(data.pagesPermissions))
 						})
 						loginBtn.disabled = false
 					} catch (error) {
