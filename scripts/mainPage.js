@@ -31,8 +31,9 @@ class HeaderManager {
 		 { text: "About us", href: "about.html" },
 		 { text: "Products", href: "pages/products/list.html" },
 		 { text: "Products scroll page", href: "pages/products/scroll-list.html" },
-		 ...(UsersApiManager.permissions?.create ? [{ text: "Add product", href: "pages/products/product-form.html" }] : []),
-		 { text: "Users", href: "pages/users/list.html" },
+		 ...(RequestManager.isAuthenticated() ? [{ text: "Add product", href: "pages/products/product-form.html" }] : []),
+		 ...(RequestManager.isAuthenticated() ? [{ text: "Users", href: "pages/users/list.html" }] : []),
+		 ...(RequestManager.isAuthenticated() ? [{ text: "Users Types", href: "pages/users_types/list.html" }] : []),
 		 { text: "Cart", href: "pages/cart/cart.html", classNameCart: 'cart'},
 		 user
 			? { text: `Logout (${user.username})`, href: "/auth/logout" }
