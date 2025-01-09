@@ -190,6 +190,12 @@ class RequestManager {
 			return null
 		}
 	}
+	
+	static getQueryParam(param) {
+		const queryString = window.location.search
+		const urlParams = new URLSearchParams(queryString)
+		return urlParams.get(param)
+	 }
 	// Метод для отримання налаштувань
 	static async fetchSettings() {
 		return this.fetchData("/settings", false)

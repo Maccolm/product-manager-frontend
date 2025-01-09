@@ -3,7 +3,8 @@ window.onload = async function () {
 		const tableContainer = document.getElementById("table-container");
 		const loadingSpinner = document.getElementById("loading-spinner");
 		const errorMessage = document.getElementById("error-message");
-
+		const addTypeBtn = document.getElementById('addUserButton')
+		
 		try {
 			loadingSpinner.style.display = "block";
 			errorMessage.style.display = "none";
@@ -22,6 +23,7 @@ window.onload = async function () {
 			tableContainer.innerHTML = "";
 
 			const table = document.createElement("table");
+			table.style.marginBottom = '20px'
 			table.innerHTML = `
 		 <thead>
 			<tr>
@@ -37,27 +39,26 @@ window.onload = async function () {
 			types.forEach((type) => {
 				const row = document.createElement("tr");
 				row.innerHTML = `
-			<td>${type.username}</td>
-			<td>${type.email}</td>
+			<td>${type.title}</td>
 			<td>
-			  <button class="product__btn" onclick="editUser('${type.id}')">Edit</button>
-			  <button class="product__btn" onclick="deleteFunction('${type.id}')">Delete</button>
+			  <button class="product__btn" onclick="editUser('${type._id}')">Edit</button>
+			  <button class="product__btn" onclick="deleteFunction('${type._id}')">Delete</button>
 			</td>
 		 `;
 				tbody.append(row);
-			});
+			})
 
-			tableContainer.append(table);
+			tableContainer.append(table)
 		} catch (error) {
 			errorMessage.style.display = "block";
-			console.error("Error to load users", error);
+			console.error("Error to load users", error)
 		} finally {
-			loadingSpinner.style.display = "none";
+			loadingSpinner.style.display = "none"
 		}
-		//функція видалення типу користувача
 	}
 	loadUsersWithRoles()
 }
+//функція видалення типу користувача
 async function deleteFunction(id) {
 	await UsersTypesApiManager.delete(id)
 	window.location.reload()
