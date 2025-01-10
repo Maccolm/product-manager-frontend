@@ -5,11 +5,18 @@ window.onload = async function () {
 	const typeObj =
 	  (await UsersTypesApiManager.getBasedOnQueryId())?.data ?? {}
 	const flatTypeObj = ObjectUtils.formNestedToFlatObject(typeObj)
-	// const redirectUrl = `${headerManager.basePath}users_types/list.html`
-
-console.log(typeObj)
+	const redirectUrl = './list.html'
 
 	const submitCallback = async (data) => {
+		const roleNameInput = document.getElementById('roleName')
+		const roleName = roleNameInput.value.trim()
+
+		if(!roleName){
+			alert('Add role Name')
+			return
+		}
+		data.title = roleName
+
 	  for (const key in data) {
 		 if (data[key] === 'on') {
 			data[key] = true
@@ -26,7 +33,10 @@ console.log(typeObj)
 	  if (res.errors) {
 		 UsersTypesApiManager.showErrors(res.errors)
 	  } else {
-		 window.location.href = redirectUrl
+		alert('Type Created Successfully')
+		setTimeout(() => {
+			window.location.href = redirectUrl
+		},100)
 	  }
 	}
 
@@ -34,6 +44,7 @@ console.log(typeObj)
 	function buildTable(containerId) {
 		const container = document.getElementById(containerId)
 		const table = document.createElement('table')
+		table.style.marginBottom = '20px'
 		table.className = 'permissions-table'
 
 		const thead = document.createElement('thead')
@@ -59,12 +70,37 @@ console.log(typeObj)
 						${flatTypeObj[`pagesPermissions.${category}.${permission}`] ? 'checked' : ''}
 					/>
 				</td>`
-			)}
+			).join('')}
 			`
 			tbody.append(row)
 		})
 		table.append(tbody)
 		container.innerHTML = ''
+		container.append(table)
 	}
-	buildTable('container')
+	function addRoleNameInput(containerId) {
+		const container = document.getElementById(containerId)
+		const div = document.createElement('div')
+		div.className='form__section'
+		div.style.maxWidth = '300px'
+		div.innerHTML = `<input type="text" id="roleName" name="roleName" placeholder="Name Of Role" />`
+		container.prepend(div)
+	 }
+	 function addSaveButton(containerId, submitCallback) {
+		const container = document.getElementById(containerId)
+		const button = document.createElement('button')
+		button.textContent = 'Save'
+		button.className = 'product__btn'
+		button.addEventListener('click', async () => {
+			const formData = {}
+			container.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+				formData[input.name] = input.checked
+			})
+			await submitCallback(formData)
+		})
+		container.append(button)
+	 }
+	 buildTable('container')
+	 addRoleNameInput('container')
+	addSaveButton('container', submitCallback )
  }

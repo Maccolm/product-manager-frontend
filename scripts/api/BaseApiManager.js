@@ -51,8 +51,7 @@ class BaseApiManager {
 	}
  
 	async delete(id) {
-		
-	  return RequestManager.deleteRequest(`${this.apiBase}/${this.routeBase}`, id)
+	  return RequestManager.deleteRequest(`${this.apiBase}${this.routeBase}`, id)
 	}
  
 	showErrors(errors, errorsContainerSelector = '#errors') {

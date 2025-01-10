@@ -60,6 +60,16 @@ window.onload = async function () {
 }
 //функція видалення типу користувача
 async function deleteFunction(id) {
-	await UsersTypesApiManager.delete(id)
-	window.location.reload()
+	try{
+		const deletedType = await UsersTypesApiManager.delete(id)		
+		if(deletedType?.success) {
+			alert('User type deleted successful!')
+		} else {
+			alert('Failed to delete user type!')
+		}
+		window.location.reload()
+	} catch (error) {
+		alert('Error to delete user type:', error)
+		console.log(error)
+	}
 }
