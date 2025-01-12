@@ -1,9 +1,9 @@
 class RequestManager {
 	// Базовий URL для API запитів
-	// static apiBase = "https://product-manager-node-js.onrender.com/api/v1"
-	// static apiUrl = "https://product-manager-node-js.onrender.com"
-	static apiBase = "http://localhost:3000/api/v1"
-	static apiUrl = "http://localhost:3000"
+	static apiBase = "https://product-manager-node-js.onrender.com/api/v1"
+	static apiUrl = "https://product-manager-node-js.onrender.com"
+	// static apiBase = "http://localhost:3000/api/v1"
+	// static apiUrl = "http://localhost:3000"
 	// Метод для отримання повного маршруту до сервера
 	static getServerRoute(path) {
 		return `${RequestManager.apiBase}${path}`

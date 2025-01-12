@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		const urlParams = new URLSearchParams(window.location.search)
 		const providerId = urlParams.get('provider')
 		// Якщо параметр 'provider' в URL вказаний, додаємо його до запиту
-		//Для випадку, коли користувач перейшов за посиланням постачвльника в його корзині товарів і тоді показуємо йому всі товари цього постачальника
+		//Для випадку, коли користувач перейшов за посиланням постачальника в його корзині товарів і тоді показуємо йому всі товари цього постачальника
 		if (providerId) queryOptions.push(`provider=${providerId}`)
 		const filtersQueryString = filtersManager.getQueryString()
 		if (filtersQueryString) queryOptions.push(filtersQueryString)

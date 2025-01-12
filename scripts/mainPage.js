@@ -20,7 +20,7 @@ class HeaderManager {
 	}
 	// Метод для створення кнопок залежно від стану автентифікації
 	createMenu() {
-		const permissions = localStorage.getItem('permissions')
+		const permissions = localStorage.getItem('permissions')		
 		const userPermissions = permissions ? JSON.parse(permissions) : ''
 	  const content = document.getElementById("mainMenu");
 		let user
