@@ -16,7 +16,7 @@ class RequestManager {
 	static async onLogout() {
 		try {
 			// Видаляємо токен з localStorage
-			localStorage.removeItem("jwt_token");
+			localStorage.clear()
 			// Оновлюємо сторінку після виходу
 			location.reload();
 		} catch (error) {
@@ -32,6 +32,8 @@ class RequestManager {
 		addAuthorization = true
 	) {
 		try {
+			const permissions = localStorage.getItem('permissions')
+
 			// Налаштування заголовків запиту
 			const headers = { "Content-Type": "application/json" };
 			// Якщо маршрут потребує автентифікації і користувач виконав автентифікацію
@@ -40,6 +42,7 @@ class RequestManager {
 				headers["Authorization"] = `Bearer ${localStorage.getItem(
 					"jwt_token"
 				)}`
+				headers["Permissions"] = `${permissions}`
 			}
 			console.log("Request:", {
 				url: RequestManager.getServerRoute(url),
@@ -86,9 +89,11 @@ class RequestManager {
 	}
 	// Метод для виконання POST запиту з даними форми
 	static async postFormRequest(url, form, addAuthorization = true) {
-		const headers = {};
+		const headers = {}
+		const permissions = localStorage.getItem('permissions')
 		if (addAuthorization && RequestManager.isAuthenticated()) {
 			headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`
+			headers["Permissions"] = `${permissions}`
 		}
 		const formData = new FormData(form)
 		const response = await fetch(url, {
@@ -102,9 +107,11 @@ class RequestManager {
 
 	// Загальний метод для виконання PUT запиту
 	static async putRequest(route, body, addAuthorization = true) {
+		const permissions = localStorage.getItem('permissions')
 		const headers = { "Content-Type": "application/json" };
 		if (addAuthorization && RequestManager.isAuthenticated()) {
 			headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`
+			headers["Permissions"] = `${permissions}`
 		}
 		
 		const response = await fetch(this.getServerRoute(route), {
@@ -117,9 +124,11 @@ class RequestManager {
 	}
 	// Загальний метод для виконання POST запиту
 	static async postRequest(route, body, addAuthorization = true) {
+		const permissions = localStorage.getItem('permissions')
 		const headers = { "Content-Type": "application/json" };
 		if (addAuthorization && RequestManager.isAuthenticated()) {
 			headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`
+			headers["Permissions"] = `${permissions}`
 		}
 		console.log('route', route);
 		console.log('body', body);
@@ -134,9 +143,11 @@ class RequestManager {
 	}
 	// Метод для виконання DELETE запиту
 	static async deleteRequest(route, id, addAuthorization = true) {
+		const permissions = localStorage.getItem('permissions')
 		const headers = { "Content-Type": "application/json" };
 		if (addAuthorization && RequestManager.isAuthenticated()) {
 			headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`;
+			headers["Permissions"] = `${permissions}`
 		}
 		const response = await fetch(`${route}/${id}`, {
 			method: "DELETE",
@@ -167,10 +178,12 @@ class RequestManager {
 	static async fetchData(url, addAuthorization = true) {
 		
 		let response
+		const permissions = localStorage.getItem('permissions')
 		try {
 			const headers = { "Content-Type": "application/json" };
 			if (addAuthorization && RequestManager.isAuthenticated()) {
 				headers["Authorization"] = `Bearer ${localStorage.getItem("jwt_token")}`
+				headers["Permissions"] = `${permissions}`
 			}
 			response = await fetch(this.getServerRoute(url), {
 				method: "GET",

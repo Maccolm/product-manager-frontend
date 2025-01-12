@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	// Завантажити продукти
 	async function loadProducts(page = 0) {
+		console.log(ProductsApiManager.permissions);
+		
 		try {
 			if(Number.isFinite(page)) pageData.currentPage = page
 			const resData = await ProductsApiManager.getListWithQuery(getFiltersQueryString())
@@ -35,16 +37,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 				totalItemsNumber: resData.data?.count,
 			 }
 
-			const isAdmin = resData.isAdmin || false
-			//перевірка на expired token
-			if (typeof isAdmin === "string") {
-				if (confirm(isAdmin)) {
-					window.location.href = "../../auth/login.html"
-					localStorage.removeItem("jwt_token")
-				} else {
-					localStorage.removeItem("jwt_token")
-				}
-			}
 			// Очищення попередніх продуктів
 			productList.innerHTML = "";
 
@@ -73,15 +65,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 			  ${
 					RequestManager.isAuthenticated() && ProductsApiManager.permissions?.update
 						? `<div class="product__actions actions">
-						 <a href="product-form.html?id=${product._id}" class="product__btn">Edit</a>
-						 <button onclick="deleteProduct('${product._id}')" class="product__btn">Delete</button>
-					  </div>`
+							 <a href="product-form.html?id=${product._id}" class="product__btn">Edit</a>
+							 ${RequestManager.isAuthenticated() && ProductsApiManager.permissions?.delete ?
+							 	`<button onclick="deleteProduct('${product._id}')" class="product__btn">Delete</button>`
+							 : ''
+							 }
+							</div>`
 						: ""
 				}
 				${
 					RequestManager.isAuthenticated() ? `<button id='buy-btn' onclick="addProductToCart('${product._id}')" class="product__btn cart">Add To Cart</button>` : ''
 				}
-			`;
+			`
 				productList.append(productContainer)
 				 //------------- додавання пагінації -----
 				setupPagination()

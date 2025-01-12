@@ -3,20 +3,23 @@ window.onload = async function () {
 		const tableContainer = document.getElementById("table-container");
 		const loadingSpinner = document.getElementById("loading-spinner");
 		const errorMessage = document.getElementById("error-message");
-		const addTypeBtn = document.getElementById('addUserButton')
 		
 		try {
 			loadingSpinner.style.display = "block";
 			errorMessage.style.display = "none";
 
 			// Отримати список типів
+			if (!RequestManager.isAuthenticated() && !UsersTypesApiManager.permissions?.read) {
+				tableContainer.innerHTML = "<p>Access Denied.</p>"
+				return
+			}
 			const data = await UsersTypesApiManager.getList();
 			console.log("data", data)
 
 			const types = data?.data || [];
 
 			if (!types.length) {
-				tableContainer.innerHTML = "<p>No types Found.</p>";
+				tableContainer.innerHTML = "<p>No types Found.</p>"
 				return;
 			}
 
@@ -40,11 +43,20 @@ window.onload = async function () {
 				const row = document.createElement("tr");
 				row.innerHTML = `
 			<td>${type.title}</td>
+			
 			<td>
-			  <button class="product__btn" onclick="editUser('${type._id}')">Edit</button>
-			  <button class="product__btn" onclick="deleteFunction('${type._id}')">Delete</button>
+			${
+				RequestManager.isAuthenticated() && UsersTypesApiManager.permissions?.update ?
+				`<button class="product__btn" onclick="editUser('${type._id}')">Edit</button>`
+				: ''
+			}
+			${
+				RequestManager.isAuthenticated() && UsersTypesApiManager.permissions?.delete ?
+				`<button class="product__btn" onclick="deleteFunction('${type._id}')">Delete</button>`
+				: ''
+			}
 			</td>
-		 `;
+		 `
 				tbody.append(row);
 			})
 
@@ -72,4 +84,7 @@ async function deleteFunction(id) {
 		alert('Error to delete user type:', error)
 		console.log(error)
 	}
+}
+function editUser(id) {
+	window.location.href = `./register.html?id=${id}`
 }

@@ -65,11 +65,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 				 <p class="product__text"><span>Distributor:</span> ${distributor}</p>
 			  </div>
 			  ${
-					isLoggedIn() && isAdmin
+					isLoggedIn() && ProductsApiManager.permissions?.update
 						? `<div class="product__actions actions">
-						 <a href="product-form.html?id=${product._id}" class="product__btn">Edit</a>
-						 <button onclick="deleteProduct('${product._id}')" class="product__btn">Delete</button>
-					  </div>`
+								<a href="product-form.html?id=${product._id}" class="product__btn">Edit</a>
+								${RequestManager.isAuthenticated() && ProductsApiManager.permissions?.delete ?
+									`<button onclick="deleteProduct('${product._id}')" class="product__btn">Delete</button>`
+								: ''
+								}
+							</div>`
 						: ""
 				}
 				${

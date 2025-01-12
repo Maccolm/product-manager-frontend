@@ -4,4 +4,4 @@ class ProductsApiManagerClass extends BaseApiManager {
 	}
  }
  
- const ProductsApiManager = new ProductsApiManagerClass('/products')
+ const ProductsApiManager = new ProductsApiManagerClass('/products', 'products')

@@ -2,11 +2,22 @@ class BaseApiManager {
 	constructor(routeBase = RequestManager.apiBase, model) {
 	  this.routeBase = routeBase
 	  this.apiBase = RequestManager.apiBase
-	//   const savedPermissions = localStorage.getItem('permissions')
-	//   const pagesPermissions = savedPermissions ? JSON.parse(savedPermissions) : null
-	//   if (model && pagesPermissions) {
-	// 	this.permissions = pagesPermissions[model]
-	//   }
+	  const savedPermissions = localStorage.getItem('permissions')
+	  const pagesPermissions = savedPermissions ? JSON.parse(savedPermissions) : null
+	// let pagesPermissions = null
+
+	// if (savedPermissions) {
+	// 	try{
+	// 		pagesPermissions = JSON.parse(savedPermissions)
+	// 	} catch (error) {
+	// 		console.error('Error to parsing from local storage', error)
+	// 		pagesPermissions = null
+	// 	}
+	// }
+	  
+	  if (model && pagesPermissions) {
+		this.permissions = pagesPermissions[model]
+	  }
 	}
 	async getList(params) {
 	  let route = this.routeBase

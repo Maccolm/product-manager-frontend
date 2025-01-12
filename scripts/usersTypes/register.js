@@ -1,10 +1,12 @@
 window.onload = async function () {
 	const categories = ['users', 'products', 'usersTypes']
 	const permissions = ['read', 'create', 'update', 'delete']
+	const params = new URLSearchParams(window.location.search)
 
 	const typeObj =
 	  (await UsersTypesApiManager.getBasedOnQueryId())?.data ?? {}
 	const flatTypeObj = ObjectUtils.formNestedToFlatObject(typeObj)
+	
 	const redirectUrl = './list.html'
 
 	const submitCallback = async (data) => {
@@ -83,7 +85,7 @@ window.onload = async function () {
 		const div = document.createElement('div')
 		div.className='form__section'
 		div.style.maxWidth = '300px'
-		div.innerHTML = `<input type="text" id="roleName" name="roleName" placeholder="Name Of Role" />`
+		div.innerHTML = `<input type="text" id="roleName" name="roleName" placeholder="Name Of Role" value="${typeObj.title ? typeObj.title : ''} "/>`
 		container.prepend(div)
 	 }
 	 function addSaveButton(containerId, submitCallback) {
