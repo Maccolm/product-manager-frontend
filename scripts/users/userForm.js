@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		try {
 			const response = await RequestManager.fetchData(`/users/types`)
 			//перевіряєми чи токен ще дійсний
-			if (response.error = 'TokenExpiredError') {
+			if (response.error && response.message) {
 				alert(response.message)
 				window.location.href = '../../auth/login.html'
 			}

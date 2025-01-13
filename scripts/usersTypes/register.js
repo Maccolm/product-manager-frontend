@@ -31,7 +31,7 @@ window.onload = async function () {
 
 	  let res = await UsersTypesApiManager.register(nestedData, typeObj)
 	//перевіряєми чи токен ще дійсний
-	if (res.error = 'TokenExpiredError') {
+	if (res.error && res.message) {
 		alert(data.message)
 		window.location.href = '../../auth/login.html'
 	}

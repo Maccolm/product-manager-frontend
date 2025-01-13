@@ -13,8 +13,9 @@ async function loadUsers(filters = {}) {
 
     const queryParams = new URLSearchParams(filters).toString();
     const data = await RequestManager.fetchData(`/users/?${queryParams}`)
+	 
 	 //перевіряєми чи токен ще дійсний
-	if (data.error = 'TokenExpiredError') {
+	if (data.error && data.message) {
 		alert(data.message)
 		window.location.href = '../../auth/login.html'
 	}

@@ -17,7 +17,7 @@ window.onload = async function () {
 			console.log("data", data)
 
 			const types = data?.data || []
-			if (data.error = 'TokenExpiredError') {
+			if (data.error && data.message) {
 				alert(data.message)
 				window.location.href = '../../auth/login.html'
 			}
