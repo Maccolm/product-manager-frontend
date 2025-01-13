@@ -13,9 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 	async function loadTypes() {
 		try {
-			const response = await RequestManager.fetchData(`/users/types`);
+			const response = await RequestManager.fetchData(`/users/types`)
+			//перевіряєми чи токен ще дійсний
+			if (response.error = 'TokenExpiredError') {
+				alert(response.message)
+				window.location.href = '../../auth/login.html'
+			}
 			const types = response.types
-			
+
 			types.forEach((type) => {
 				const option = document.createElement("option");
 				option.value = type._id;
@@ -32,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			const userId = params.get("id")
 			if(userId) {
 				const response = await RequestManager.fetchData(`/users/register/${userId}`)
-				
+
 				if(!response) {
 					throw new Error("Failed to fetch user details")
 				} else if (response.error) {

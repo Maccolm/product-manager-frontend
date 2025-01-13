@@ -13,14 +13,18 @@ window.onload = async function () {
 				tableContainer.innerHTML = "<p>Access Denied.</p>"
 				return
 			}
-			const data = await UsersTypesApiManager.getList();
+			const data = await UsersTypesApiManager.getList()
 			console.log("data", data)
 
-			const types = data?.data || [];
+			const types = data?.data || []
+			if (data.error = 'TokenExpiredError') {
+				alert(data.message)
+				window.location.href = '../../auth/login.html'
+			}
 
 			if (!types.length) {
 				tableContainer.innerHTML = "<p>No types Found.</p>"
-				return;
+				return
 			}
 
 			tableContainer.innerHTML = "";

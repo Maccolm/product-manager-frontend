@@ -1,7 +1,6 @@
 window.onload = async function () {
 	const categories = ['users', 'products', 'usersTypes']
 	const permissions = ['read', 'create', 'update', 'delete']
-	const params = new URLSearchParams(window.location.search)
 
 	const typeObj =
 	  (await UsersTypesApiManager.getBasedOnQueryId())?.data ?? {}
@@ -31,7 +30,11 @@ window.onload = async function () {
 	  console.table(JSON.stringify(nestedData))
 
 	  let res = await UsersTypesApiManager.register(nestedData, typeObj)
-
+	//перевіряєми чи токен ще дійсний
+	if (res.error = 'TokenExpiredError') {
+		alert(data.message)
+		window.location.href = '../../auth/login.html'
+	}
 	  if (res.errors) {
 		 UsersTypesApiManager.showErrors(res.errors)
 	  } else {

@@ -13,7 +13,11 @@ async function loadUsers(filters = {}) {
 
     const queryParams = new URLSearchParams(filters).toString();
     const data = await RequestManager.fetchData(`/users/?${queryParams}`)
-	 
+	 //перевіряєми чи токен ще дійсний
+	if (data.error = 'TokenExpiredError') {
+		alert(data.message)
+		window.location.href = '../../auth/login.html'
+	}
     if (data.users && data.users.length === 0) {
       userTableBody.innerHTML = '<tr><td colspan="4">No users found.</td></tr>'
       return
